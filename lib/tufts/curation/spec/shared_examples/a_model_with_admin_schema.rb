@@ -109,12 +109,6 @@ shared_examples 'a model with admin metadata attributes' do
       .with_predicate(Tufts::Vocab::Tufts.createdby)
   end
 
-  xit 'is part of' do
-    work.is_part_of = ['Something bigger']
-    expect(work.resource.dump(:ttl))
-      .to match(/purl.org\/dc\/terms\/isPartOf/)
-  end
-
   it 'has a license field' do
     expect(work)
       .to have_editable_property(:tufts_license)

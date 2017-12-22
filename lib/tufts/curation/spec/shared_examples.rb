@@ -5,6 +5,7 @@ module Tufts
     module Spec
       module SharedExamples
         require 'tufts/curation/spec/shared_examples/a_model_with_admin_schema'
+        require 'tufts/curation/spec/shared_examples/a_model_with_descriptive_schema'
       end
     end
   end
