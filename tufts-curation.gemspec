@@ -19,7 +19,12 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.3.4'
 
+  gem.add_dependency 'activesupport'
+  gem.add_dependency 'active-fedora', '>= 11.5', '<= 12.99'
+
   gem.add_development_dependency 'yard',        '~> 0.9'
+  gem.add_development_dependency 'bixby',       '~> 0.3'
+  gem.add_development_dependency 'hyrax-spec',  '~> 0.2'
   gem.add_development_dependency 'rspec',       '~> 3.6'
   gem.add_development_dependency 'guard-rspec', '~> 4.7'
   gem.add_development_dependency 'coveralls',   '~> 0.8'

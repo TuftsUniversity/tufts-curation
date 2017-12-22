@@ -1,0 +1,12 @@
+inherit_gem:
+  bixby: bixby_default.yml
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'lib/tufts/curation/spec/**/*'
+    - 'lib/tufts/curation/schema/**/*'
+Naming/FileName:
+  Exclude:
+    - '**/Gemfile'
+    - '*.gemspec'
