@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+require 'hyrax/controlled_vocabularies/location'
+require 'models/concerns/hyrax/core_metadata'
+require 'models/concerns/hyrax/basic_metadata'
+
+require 'tufts/curation/vocab/tufts'
+require 'tufts/curation/schema/administrative'
+require 'tufts/curation/schema/descriptive'
+require 'tufts/curation/schema/transcription'
+
 module Tufts
   module Curation
     ##
