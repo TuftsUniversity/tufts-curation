@@ -3,10 +3,10 @@
 require 'pry' unless ENV['CI']
 
 require 'bundler/setup'
-require 'active_fedora'
-require 'hyrax/spec/matchers'
 require 'tufts/curation'
 require 'tufts/curation/spec/shared_examples'
+require 'hyrax/spec/shared_examples'
+require 'hyrax/spec/matchers'
 
 Dir['./spec/support/**/*.rb'].each { |f| require f }
 
