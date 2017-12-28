@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'tufts/curation/vocab/tufts'
-
 module Tufts
   module Curation
     module Schema

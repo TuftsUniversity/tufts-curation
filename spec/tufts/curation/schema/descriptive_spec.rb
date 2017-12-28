@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'tufts/curation/schema/descriptive'
 
 describe Tufts::Curation::Schema::Descriptive do
   subject(:work) { model_class.new }
