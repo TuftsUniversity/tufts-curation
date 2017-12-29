@@ -7,7 +7,16 @@ require 'rdf/vocab'
 
 require 'tufts/curation/indexer'
 require 'tufts/curation/tufts_model'
+
+require 'tufts/curation/audio'
+require 'tufts/curation/ead'
+require 'tufts/curation/generic_object'
+require 'tufts/curation/image'
 require 'tufts/curation/pdf'
+require 'tufts/curation/rcr'
+require 'tufts/curation/tei'
+require 'tufts/curation/video'
+require 'tufts/curation/voting_record'
 
 module Tufts
   ##

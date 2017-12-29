@@ -3,7 +3,7 @@
 module Tufts
   module Curation
     ##
-    # A Pdf work type
-    class Pdf < TuftsModel; end
+    # A Voting Record work type
+    class VotingRecord < TuftsModel; end
   end
 end

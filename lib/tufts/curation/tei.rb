@@ -3,7 +3,7 @@
 module Tufts
   module Curation
     ##
-    # A Pdf work type
-    class Pdf < TuftsModel; end
+    # A Tei work type
+    class Tei < TuftsModel; end
   end
 end

@@ -3,7 +3,7 @@
 module Tufts
   module Curation
     ##
-    # A Pdf work type
-    class Pdf < TuftsModel; end
+    # An EAD work type
+    class Ead < TuftsModel; end
   end
 end

@@ -3,7 +3,7 @@
 module Tufts
   module Curation
     ##
-    # A Pdf work type
-    class Pdf < TuftsModel; end
+    # An Rcr work type
+    class Rcr < TuftsModel; end
   end
 end

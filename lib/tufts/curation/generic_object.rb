@@ -3,7 +3,7 @@
 module Tufts
   module Curation
     ##
-    # A Pdf work type
-    class Pdf < TuftsModel; end
+    # A GenericObject work type
+    class GenericObject < TuftsModel; end
   end
 end
