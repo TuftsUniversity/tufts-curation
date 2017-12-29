@@ -3,6 +3,19 @@ module Tufts
     ##
     # A base class for Tufts Collections
     class Collection < ActiveFedora::Base
+      ##
+      # Use `Hyrax::CollectionBehavior` in subclasses if it is available. Hyrax
+      # applications will have this loaded.
+      #
+      # If it is unavailable, we skip loading the complex behavior and settle for having
+      # `Hyrax::CoreMetadata` and `Hyrax::BasicMetadata` in place.
+      def self.inherited(subclass)
+        subclass.include 'Hyrax::CollectionBehavior'.constantize
+      rescue NameError => e
+        warn 'Hyrax::CollectionBehavior is unavailable; skipping inclusion ' \
+             "in #{subclass}.\n#{e}"
+      end
+
       include Hyrax::CoreMetadata
 
       property :ead, predicate: ::Tufts::Vocab::Tufts.has_description do |index|
@@ -15,43 +28,7 @@ module Tufts
       # schema (by adding accepts_nested_attributes)
       include Hyrax::BasicMetadata
 
-      ##
-      # Overrides setter method to preserve order in a second property.
-      #
-      # @param values [Array<Object] Ordered array of values
-      #
-      # @return [Array<Object>]
-      def creator=(values)
-        super && self.ordered_creators = values.to_json
-      end
-
-      ##
-      # Overrides getter method to return the creators in the correct order.
-      #
-      # @return [Array<Object>]
-      def creator
-        return super if ordered_creators.blank?
-        JSON.parse(ordered_creators)
-      end
-
-      ##
-      # Overrides setter method to preserve order in a second property.
-      #
-      # @param values [Array<Object>] Ordered array of values
-      #
-      # @return [Array<Object>]
-      def description=(values)
-        super && self.ordered_descriptions = values.to_json
-      end
-
-      ##
-      # Overrides getter method to return the descriptions in the correct order.
-      #
-      # @return [Array<Object>]
-      def description
-        return super if ordered_descriptions.blank?
-        JSON.parse(ordered_descriptions)
-      end
+      include Tufts::Curation::Schema::OrderedOverrides
     end
   end
 end

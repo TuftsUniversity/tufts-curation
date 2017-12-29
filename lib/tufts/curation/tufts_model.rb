@@ -8,6 +8,7 @@ require 'tufts/curation/vocab/tufts'
 require 'tufts/curation/schema/administrative'
 require 'tufts/curation/schema/descriptive'
 require 'tufts/curation/schema/ordered'
+require 'tufts/curation/schema/ordered_overrides'
 require 'tufts/curation/schema/transcription'
 
 module Tufts
@@ -15,6 +16,22 @@ module Tufts
     ##
     # A base class for Tufts Models
     class TuftsModel < ActiveFedora::Base
+      ##
+      # Use `Hyrax::Workbehavior` in subclasses if it is available. Hyrax
+      # applications will have this loaded.
+      #
+      # If it is unavailable, we skip loading the complex behavior and settle for having
+      # `Hyrax::CoreMetadata` and `Hyrax::BasicMetadata` in place.
+      def self.inherited(subclass)
+        subclass.include 'Hyrax::WorkBehavior'.constantize
+      rescue NameError => e
+        # Don't bother reporting failure to load for classes defined in this
+        # namespace, which are assumed to be abstract.
+        return if subclass.parent == Tufts::Curation
+        warn 'Hyrax::WorkBehavior is unavailable; skipping ' \
+             "inclusion in #{subclass}.\n#{e}"
+      end
+
       include Hyrax::CoreMetadata
 
       validates :title, presence: { message: 'Your work must have a title.' }
@@ -32,43 +49,7 @@ module Tufts
       # schema (by adding accepts_nested_attributes)
       include Hyrax::BasicMetadata
 
-      ##
-      # Overrides setter method to preserve order in a second property.
-      #
-      # @param values [Array<Object] Ordered array of values
-      #
-      # @return [Array<Object>]
-      def creator=(values)
-        super && self.ordered_creators = values.to_json
-      end
-
-      ##
-      # Overrides getter method to return the creators in the correct order.
-      #
-      # @return [Array<Object>]
-      def creator
-        return super if ordered_creators.blank?
-        JSON.parse(ordered_creators)
-      end
-
-      ##
-      # Overrides setter method to preserve order in a second property.
-      #
-      # @param values [Array<Object>] Ordered array of values
-      #
-      # @return [Array<Object>]
-      def description=(values)
-        super && self.ordered_descriptions = values.to_json
-      end
-
-      ##
-      # Overrides getter method to return the descriptions in the correct order.
-      #
-      # @return [Array<Object>]
-      def description
-        return super if ordered_descriptions.blank?
-        JSON.parse(ordered_descriptions)
-      end
+      include Tufts::Curation::Schema::OrderedOverrides
     end
   end
 end
