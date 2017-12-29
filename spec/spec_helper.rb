@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'pry' unless ENV['CI']
+ENV['environment'] ||= 'test'
 
 require 'bundler/setup'
 require 'tufts/curation'
