@@ -7,6 +7,7 @@ require 'rdf/vocab'
 
 require 'tufts/curation/indexer'
 require 'tufts/curation/tufts_model'
+require 'tufts/curation/collection'
 
 require 'tufts/curation/audio'
 require 'tufts/curation/ead'
