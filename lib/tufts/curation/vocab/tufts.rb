@@ -31,6 +31,8 @@ module Tufts
         term :qr_note
         term :creator_department
         term :admin_set_member
+        term :ordered_creators
+        term :ordered_descriptions
       end
     end
   end
