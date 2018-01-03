@@ -22,5 +22,45 @@ require 'tufts/curation/voting_record'
 module Tufts
   ##
   # Shared models and curation tools for Tufts Hyrax repositories.
-  module Curation; end
+  module Curation
+    MODELS = { audio:          Tufts::Curation::Audio,
+               ead:            Tufts::Curation::Ead,
+               generic_object: Tufts::Curation::GenericObject,
+               image:          Tufts::Curation::Image,
+               pdf:            Tufts::Curation::Pdf,
+               rcr:            Tufts::Curation::Rcr,
+               tei:            Tufts::Curation::Tei,
+               video:          Tufts::Curation::Video,
+               voting_record:  Tufts::Curation::VotingRecord }.freeze
+
+    ##
+    # Registers curation_concerns with a hyrax application using the passed
+    # in configuration object.
+    #
+    # @example
+    #    # config/initializers/hyrax.rb
+    #    Hyrax.config do |config|
+    #      Tufts::Curation.setup_models!(configuration: config)
+    #      # ..
+    #    end
+    #
+    # @param configuration [Hyrax::Configuration]
+    #
+    # For a block { |model| ... }
+    # @yield each model class defined during setup
+    # @yieldparam model [Class]
+    #
+    # @return [void]
+    def setup_models!(configuration:)
+      MODELS.each do |model_name, parent_class|
+        class_name = model_name.to_s.camelize
+        Object.const_set(class_name, Class.new(parent_class))
+
+        yield class_name.constantize if block_given?
+
+        configuration.register_curation_concern(model_name)
+      end
+    end
+    module_function :setup_models!
+  end
 end
