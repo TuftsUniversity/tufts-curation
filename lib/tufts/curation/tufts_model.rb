@@ -24,6 +24,7 @@ module Tufts
       # `Hyrax::CoreMetadata` and `Hyrax::BasicMetadata` in place.
       def self.inherited(subclass)
         subclass.include 'Hyrax::WorkBehavior'.constantize
+        subclass.indexer = Tufts::Curation::Indexer
       rescue NameError => e
         # Don't bother reporting failure to load for classes defined in this
         # namespace, which are assumed to be abstract.
