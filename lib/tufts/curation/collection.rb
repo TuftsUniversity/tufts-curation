@@ -11,6 +11,7 @@ module Tufts
       # `Hyrax::CoreMetadata` and `Hyrax::BasicMetadata` in place.
       def self.inherited(subclass)
         subclass.include 'Hyrax::CollectionBehavior'.constantize
+        subclass.indexer = Hyrax::CollectionWithBasicMetadataIndexer
       rescue NameError => e
         warn 'Hyrax::CollectionBehavior is unavailable; skipping inclusion ' \
              "in #{subclass}.\n#{e}"
