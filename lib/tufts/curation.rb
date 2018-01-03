@@ -8,6 +8,7 @@ require 'rdf/vocab'
 require 'tufts/curation/indexer'
 require 'tufts/curation/tufts_model'
 require 'tufts/curation/collection'
+require 'tufts/curation/file_set'
 
 require 'tufts/curation/audio'
 require 'tufts/curation/ead'
@@ -60,6 +61,9 @@ module Tufts
 
         configuration.register_curation_concern(model_name)
       end
+
+      Object.const_set('FileSet', Class.new(Tufts::Curation::FileSet))
+      Object.const_set('Collection', Class.new(Tufts::Curation::Collection))
     end
     module_function :setup_models!
   end

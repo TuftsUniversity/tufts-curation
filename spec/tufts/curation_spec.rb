@@ -32,6 +32,16 @@ describe Tufts::Curation do
         .to contain_exactly(*expected_concerns)
     end
 
+    it 'defines Collection' do
+      described_class.setup_models!(configuration: configuration)
+      expect(defined?(Collection)).to eq 'constant'
+    end
+
+    it 'defines FileSet' do
+      described_class.setup_models!(configuration: configuration)
+      expect(defined?(FileSet)).to eq 'constant'
+    end
+
     it 'yields each concern type' do
       expect { |b| described_class.setup_models!(configuration: configuration, &b) }
         .to yield_control.exactly(expected_concerns.count).times
