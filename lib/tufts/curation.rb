@@ -53,6 +53,8 @@ module Tufts
     #
     # @return [void]
     def setup_models!(configuration:)
+      configuration.admin_set_predicate = Tufts::Vocab::Tufts.admin_set_member
+
       MODELS.each do |model_name, parent_class|
         class_name = model_name.to_s.camelize
         Object.const_set(class_name, Class.new(parent_class))
