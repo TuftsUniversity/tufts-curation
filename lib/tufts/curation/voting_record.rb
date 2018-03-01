@@ -10,8 +10,9 @@ module Tufts
       # that inherits Tufts::Curation::VotingRecord
       #
       # @argument subclass
-      #   The anonymous class that's being used as VotingRecordg
+      #   The anonymous class that's being used as VotingRecord
       def self.inherited(subclass)
+        super
         subclass.indexer=Tufts::Curation::VotingRecordIndexer
       end
     end

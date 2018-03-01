@@ -58,7 +58,6 @@ module Tufts
 
       MODELS.each do |model_name, parent_class|
         class_name = model_name.to_s.camelize
-        puts "Setting #{class_name} to #{parent_class}"
         Object.const_set(class_name, Class.new(parent_class))
 
         yield class_name.constantize if block_given?

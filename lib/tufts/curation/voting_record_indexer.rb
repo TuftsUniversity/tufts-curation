@@ -3,82 +3,116 @@
 module Tufts
   module Curation
     class VotingRecordIndexer < Tufts::Curation::Indexer
+      # The Nokogiri document
+      attr_accessor :noko
+
       def generate_solr_document
         super.tap do |solr_doc|
+          # Only do this after the indexer has the file_set.
+          unless object.file_sets.nil?
+            load_elections_xml(object)
 
-        #   object.file_sets.each do |file_set|
-        #
-        #     f = file_set.original_file
-        #     # check that its truly a voting record
-        #     begin
-        #       doc = Nokogiri::XML(f.content)
-        #       next unless doc.xpath('/*').first.name == 'election_record'
-        #     rescue
-        #       next
-        #     end
-        #
-        #     doc = Datastreams::ElectionRecord.from_xml(f.content)
-        #
-        #     # Merge the datastream's to_solr with this one.
-        #     solr_doc.merge!(doc.to_solr)
-        #
-        #     solr_doc['party_affiliation_sim'] = get_affs(doc.office.role.ballot)
-        #     solr_doc['party_affiliation_id_ssim'] = get_aff_ids(doc.office.role.ballot)
-        #     solr_doc['title_tesi'] = solr_doc['title_ssi'] = solr_doc['label_tesim'].first
-        #     solr_doc['voting_record_xml_tesi'] = f.content
-        #     solr_doc['all_text_timv'] = get_all_text(solr_doc)
-        #   end # end each file set
+            solr_doc['voting_record_xml_tesi'] = @noko.to_xml
+            solr_doc['format_ssim'] = 'Election Record' #solr_doc['format_tesim']
+            solr_doc['title_ssi'] = solr_doc['title_tesim'].first #solr_doc['title_tesi']
+
+            solr_doc['party_affiliation_sim'] = get_all_vs('//aas:candidate/@affiliation', '//aas:elector/@affiliation')
+            solr_doc['party_affiliation_id_ssim'] = get_all_vs('//aas:candidate/@affiliation_id', '//aas:elector/@affiliation_id')
+            #solr_doc['party_affiliation_id_ssim'].delete_if { |party_id| Party.find(party_id).nil? }
+
+            solr_doc['date_tesim'] = get_all_vs('/aas:election_record/@date')
+            solr_doc['date_isi'] = solr_doc['date_tesim'].map(&:to_i).first
+            # solr_doc["date_sim"] = date.first[0..3] unless date.first.nil?
+
+            solr_doc['office_id_ssim'] = get_v('/aas:election_record/aas:office/@office_id')
+            solr_doc['office_role_title_tesim'] = get_all_vs( '//aas:role/@title')
+
+            solr_doc['election_id_ssim'] = [get_v('/aas:election_record/@election_id')]
+            solr_doc['election_type_tesim'] = solr_doc['election_type_sim'] = [get_v('/aas:election_record/@type')]
+
+            solr_doc['candidate_id_ssim'] = get_all_vs('//aas:candidate/@name_id')
+            solr_doc['candidate_name_tesim'] = get_all_vs('//aas:candidate/@name')
+
+            solr_doc['elector_name_tesim'] = get_all_vs("//aas:elector/@name")
+
+            solr_doc['jurisdiction_tesim'] = solr_doc['jurisdiction_sim'] = [get_v('/aas:election_record/aas:office/@scope')]
+
+            solr_doc['handle_ssi'] = get_v('/aas:election_record/@handle')
+            solr_doc['iteration_tesim'] = [get_v('/aas:election_record/@iteration')]
+            solr_doc['page_image_urn_ssim'] = get_all_vs("//aas:reference[type='page_image']/@urn")
+            solr_doc['all_text_timv'] = get_all_text(solr_doc)
+
+            # office_name_tesim
+            # state_name_tesim
+            # state_name_sim
+          end
         end # End super.tap
       end
-
       # End def generate_solr_document
 
-      # private
+      private
+
+      ##
+      # Gets the first value from a place.
+      def get_v(xpath)
+        @noko.xpath(xpath).first.value
+      end
+
+      ##
+      # Gets all the values from a node set as strings in an array.
       #
-      # ##
-      # # Checks if something has an empty method and, if so, checks that method.
-      # #
-      # # @param thing
-      # #   The thing to check.
-      # def safe_empty(thing)
-      #   thing.class.method_defined?(:empty?) && thing.empty?
+      # @param {str} xpaths
+      #   The xpath strings to search
+      def get_all_vs(*xpaths)
+        if xpaths.length.zero?
+          Rails.logger.info("You need to pass at least one argument to get_all_vs!")
+          return []
+        end
+
+        all_values = []
+        xpaths.each do |path|
+          @noko.xpath(path).each { |node| all_values << node.value }
+        end
+        all_values - ['null']
+      end
+
+      ##
+      # Gets all the text and makes it one, like Voltron.
+      #
+      # @param {Hash} doc
+      #   The solr document.
+      def get_all_text(doc)
+        all_text_values = []
+        undesirables = ['voting_record_xml_tesi', 'object_profile_ssm']
+
+        doc.each do |key, value|
+          all_text_values << value unless undesirables.include?(key)
+        end
+
+        all_text_values.flatten.uniq - ["null", ""]
+      end
+
+      # def office_name(id)
+      #   Office.find(id).blank? ? nil : office.name
       # end
+
+      ##
+      # Loads the elections xml file into @noko
       #
-      # ##
-      # # Concats the candidate and elector affiliations.
-      # #
-      # # @param {obj} ballot
-      # #   The ballot with the affiliations.
-      # def get_affs(ballot)
-      #   ballot.candidate.affiliation.to_a + ballot.elector.affiliation.to_a - ['null']
-      # end
-      #
-      # ##
-      # # Concats the candidate and elector affiliation ids.
-      # #
-      # # @param {obj} ballot
-      # #   The ballot with the affiliations.
-      # def get_aff_ids(ballot)
-      #   ids = ballot.candidate.affiliation_id.to_a + ballot.elector.affiliation_id.to_a
-      #   ids.delete_if { |party_id| Party.find(party_id).nil? }
-      #   ids - ['null']
-      # end
-      #
-      # ##
-      # # Gets all the text and makes it one, like Voltron.
-      # #
-      # # @param {Hash} doc
-      # #   The solr document.
-      # def get_all_text(doc)
-      #   all_text_values = []
-      #   undesirables = ['voting_record_xml_tesi', 'object_profile_ssm']
-      #
-      #   doc.each do |key, value|
-      #     all_text_values << value unless undesirables.include?(key)
-      #   end
-      #
-      #   all_text_values.flatten.uniq - ["null", ""]
-      # end
+      # @param {obj} active_fedora_obj
+      #   The object from ActiveFedora
+      def load_elections_xml(active_fedora_obj)
+        active_fedora_obj.file_sets.each do |file_set|
+          f = file_set.original_file
+          begin
+            xml = Nokogiri::XML(f.content)
+            next unless xml.xpath('/*').first.name == 'election_record'
+          rescue
+            next
+          end
+          @noko = xml
+        end # end each file set
+      end
     end # End class VotingRecordIndexer
   end
 end
