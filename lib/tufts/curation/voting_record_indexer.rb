@@ -8,7 +8,7 @@ module Tufts
 
       def generate_solr_document
         super.tap do |solr_doc|
-          # Only do this after the indexer has the file_set.
+          # Only do this after the indexer has the file_set
           unless object.file_sets.nil?
             load_elections_xml(object)
 
@@ -26,6 +26,9 @@ module Tufts
 
             solr_doc['office_id_ssim'] = get_v('/aas:election_record/aas:office/@office_id')
             solr_doc['office_role_title_tesim'] = get_all_vs( '//aas:role/@title')
+            solr_doc['office_name_tesim'] = get_authority_from_nnv(solr_doc['office_id_ssim'], "office")
+
+            solr_doc['state_name_tesim'] = solr_doc['state_name_sim'] = get_all_vs('//aas:admin_unit[@type="State"]/@name')
 
             solr_doc['election_id_ssim'] = [get_v('/aas:election_record/@election_id')]
             solr_doc['election_type_tesim'] = solr_doc['election_type_sim'] = [get_v('/aas:election_record/@type')]
@@ -41,10 +44,6 @@ module Tufts
             solr_doc['iteration_tesim'] = [get_v('/aas:election_record/@iteration')]
             solr_doc['page_image_urn_ssim'] = get_all_vs("//aas:reference[type='page_image']/@urn")
             solr_doc['all_text_timv'] = get_all_text(solr_doc)
-
-            # office_name_tesim
-            # state_name_tesim
-            # state_name_sim
           end
         end # End super.tap
       end
@@ -112,6 +111,20 @@ module Tufts
           end
           @noko = xml
         end # end each file set
+      end
+
+      ##
+      # Sends the api request to the NNV site to get authorities
+      #
+      # @param {str} q
+      #   The search string, an id for office or party, a name for state.
+      # @param {str} auth
+      #   The authority to search: office, party, or state.
+      def get_authority_from_nnv(q, auth)
+        base_url = "http://elections-prod-01.lib.tufts.edu/qa/search"
+        uri = URI.parse("#{base_url}/#{auth}/subjects?q=#{q}")
+        response = Net::HTTP.get_response(uri)
+        response.code == "200" ? response.body : q
       end
     end # End class VotingRecordIndexer
   end
