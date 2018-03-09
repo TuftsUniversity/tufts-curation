@@ -13,7 +13,7 @@ module Tufts
       #   The anonymous class that's being used as VotingRecord
       def self.inherited(subclass)
         super
-        subclass.indexer=Tufts::Curation::VotingRecordIndexer
+        subclass.indexer = Tufts::Curation::VotingRecordIndexer
       end
     end
   end
