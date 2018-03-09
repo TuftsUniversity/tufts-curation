@@ -33,6 +33,41 @@ module Tufts
     class Indexer < Hyrax::WorkIndexer
       include Hyrax::IndexesBasicMetadata
       include Hyrax::IndexesLinkedMetadata
+      delegate :logger, to: ActiveFedora::Base
+
+      def generate_solr_document
+        super.tap do |solr_doc|
+          solr_doc['pub_date_facet_ssim'] = get_date_facet
+        end
+      end
+
+      private
+
+        def get_date_facet
+          dates = object.primary_date
+          temporals = object.temporal
+          date_facets = []
+          dates = temporals if dates.empty?
+          return date_facets if dates.empty?
+
+          dates.each do |date|
+            # remove trailing period
+            date = date.chomp('.') if date
+
+            # handle n.d.
+            date = "0" if !date.nil? && date[/n\.d/]
+
+            begin
+              parsed_date = Date.parse(date)
+              date_facets.push(parsed_date)
+            rescue
+              logger.error("Unable to find a parsable date for: #{object.id}")
+              next
+            end
+          end
+
+          date_facets
+        end
     end
   end
 end
