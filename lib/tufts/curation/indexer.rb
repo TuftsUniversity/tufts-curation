@@ -73,7 +73,7 @@ module Tufts
             [Date.iso8601(date).year]
           end
         rescue ArgumentError
-          raise "Invalid date: #{date.inspect}"
+          logger.error "Invalid date: #{date.inspect}, trying to index #{object.id}"
         end
 
         # Returns date wth some basic clean up of common problems we have in
