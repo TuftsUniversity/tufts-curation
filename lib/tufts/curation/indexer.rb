@@ -74,6 +74,7 @@ module Tufts
           end
         rescue ArgumentError
           logger.error "Invalid date: #{date.inspect}, trying to index #{object.id}"
+          []
         end
 
         # Returns date wth some basic clean up of common problems we have in
