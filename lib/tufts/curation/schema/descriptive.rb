@@ -26,7 +26,7 @@ module Tufts
           end
 
           property :geog_name,
-                   predicate: ::Tufts::Vocab::Tufts.geog_name do |index|
+                   predicate: ::Tufts::Vocab::Tufts.geog_name, multiple: true do |index|
             index.as :stored_searchable, :facetable
           end
 
