@@ -25,6 +25,11 @@ module Tufts
             index.as :stored_searchable
           end
 
+          property :geog_name,
+                   predicate: ::Tufts::Vocab::Tufts.geog_name do |index|
+            index.as :stored_searchable, :facetable
+          end
+
           property :held_by, predicate: RDF::Vocab::Bibframe.heldBy do |index|
             index.as :stored_searchable, :facetable
           end
