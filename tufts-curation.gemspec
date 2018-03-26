@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'activesupport'
   gem.add_dependency 'active-fedora', '>= 11.5', '<= 12.99'
-  gem.add_dependency 'hyrax',         '~> 2.0.0'
+  gem.add_dependency 'hyrax',         '>= 2.0.0', '<= 2.2.0'
 
   gem.add_development_dependency 'yard',         '~> 0.9'
   gem.add_development_dependency 'bixby',        '~> 0.3'
