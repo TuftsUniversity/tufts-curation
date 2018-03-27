@@ -25,6 +25,12 @@ shared_examples 'a model with admin metadata attributes' do
       .with_predicate(Tufts::Vocab::Tufts.steward)
   end
 
+  it 'has downloadable' do
+    expect(work)
+      .to have_editable_property(:downloadable)
+      .with_predicate(Tufts::Vocab::Tufts.downloadable)
+  end
+
   it 'has internal_note' do
     expect(work)
       .to have_editable_property(:internal_note)

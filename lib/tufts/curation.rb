@@ -1,5 +1,7 @@
 # frozen_string_literal: true
-hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-2') }
+require 'byebug'
+
+hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax') }
 $LOAD_PATH.unshift(Pathname.new(hyrax_path).join('..', 'app').to_s)
 
 require 'active_fedora'

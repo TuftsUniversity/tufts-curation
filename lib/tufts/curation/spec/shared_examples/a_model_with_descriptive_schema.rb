@@ -5,6 +5,12 @@ shared_examples 'a model with descriptive metadata attributes' do
       .with_predicate(RDF::Vocab::DC.spatial)
   end
 
+  it 'has geog_names' do
+    expect(work)
+      .to have_editable_property(:geog_name)
+      .with_predicate(Tufts::Vocab::Tufts.geog_name)
+  end
+
   it 'has held by' do
     expect(work)
       .to have_editable_property(:held_by)

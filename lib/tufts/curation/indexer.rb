@@ -33,6 +33,57 @@ module Tufts
     class Indexer < Hyrax::WorkIndexer
       include Hyrax::IndexesBasicMetadata
       include Hyrax::IndexesLinkedMetadata
+      delegate :logger, to: ActiveFedora::Base
+
+      def generate_solr_document
+        super.tap do |solr_doc|
+          solr_doc['pub_date_facet_isim'] = date_facet
+        end
+      end
+
+      private
+
+        # @return [Array<Integer>] a list of integers representing the years referenced in the dates
+        def date_facet
+          dates = object.primary_date
+          temporals = object.temporal
+          date_facets = []
+          dates = temporals if dates.empty?
+          return date_facets if dates.empty?
+
+          dates.flat_map { |date| extract_year(date) }.uniq
+        end
+
+        # Return an integer corresponding to the year in a string  date
+        # Accepts years in form YYYY, iso8601, and ranges YYYY-YYYY
+        # @param date [String]
+        # @return [Array<Integer>] the four digit integer(s) corresponding to year(s) in the date or date range
+        def extract_year(date)
+          date = preflight_date(date)
+          if date.blank? || date[/n\.d/]
+            []
+          elsif /^\d{4}$/ =~ date
+            # Date.iso8601 doesn't support YYYY dates
+            [date.to_i]
+          elsif /^\d{4}-\d{4}$/ =~ date
+            # date range in YYYY-YYYY format
+            earliest, latest = date.split('-').flat_map(&:to_i)
+            (earliest..latest).to_a
+          else
+            [Date.iso8601(date).year]
+          end
+        rescue ArgumentError
+          logger.error "Invalid date: #{date.inspect}, trying to index #{object.id}"
+          []
+        end
+
+        # Returns date wth some basic clean up of common problems we have in
+        # our data.
+        # @param date [String]
+        def preflight_date(date)
+          # remove trailing period
+          date.chomp('.')
+        end
     end
   end
 end

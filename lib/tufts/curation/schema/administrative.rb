@@ -30,6 +30,10 @@ module Tufts
             index.as :stored_searchable
           end
 
+          property :downloadable, predicate: ::Tufts::Vocab::Tufts.downloadable, multiple: false do |index|
+            index.as :stored_searchable
+          end
+
           property :internal_note, predicate: ::Tufts::Vocab::Tufts.internal_note, multiple: false do |index|
             index.as :stored_searchable
           end

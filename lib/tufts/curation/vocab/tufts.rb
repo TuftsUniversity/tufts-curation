@@ -33,6 +33,8 @@ module Tufts
         term :admin_set_member
         term :ordered_creators
         term :ordered_descriptions
+        term :downloadable
+        term :geog_name
       end
     end
   end
