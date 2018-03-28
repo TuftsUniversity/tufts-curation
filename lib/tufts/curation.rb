@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'byebug'
 
 hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax') }
 $LOAD_PATH.unshift(Pathname.new(hyrax_path).join('..', 'app').to_s)
