@@ -8,44 +8,46 @@ module Tufts
 
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/BlockLength
       def generate_solr_document
         super.tap do |solr_doc|
           # Only do this after the indexer has the file_set
           unless object.file_sets.nil?
             load_elections_xml(object)
+            unless @noko.nil?
+              solr_doc['voting_record_xml_tesi'] = @noko.to_xml
+              solr_doc['format_ssim'] = 'Election Record' # solr_doc['format_tesim']
+              solr_doc['title_ssi'] = solr_doc['title_tesim'].first # solr_doc['title_tesi']
 
-            solr_doc['voting_record_xml_tesi'] = @noko.to_xml
-            solr_doc['format_ssim'] = 'Election Record' # solr_doc['format_tesim']
-            solr_doc['title_ssi'] = solr_doc['title_tesim'].first # solr_doc['title_tesi']
+              solr_doc['party_affiliation_sim'] = get_all_vs('//aas:candidate/@affiliation', '//aas:elector/@affiliation')
+              solr_doc['party_affiliation_id_ssim'] = get_all_vs('//aas:candidate/@affiliation_id', '//aas:elector/@affiliation_id')
+              # solr_doc['party_affiliation_id_ssim'].delete_if { |party_id| Party.find(party_id).nil? }
 
-            solr_doc['party_affiliation_sim'] = get_all_vs('//aas:candidate/@affiliation', '//aas:elector/@affiliation')
-            solr_doc['party_affiliation_id_ssim'] = get_all_vs('//aas:candidate/@affiliation_id', '//aas:elector/@affiliation_id')
-            # solr_doc['party_affiliation_id_ssim'].delete_if { |party_id| Party.find(party_id).nil? }
+              solr_doc['date_tesim'] = get_all_vs('/aas:election_record/@date')
+              solr_doc['date_isi'] = solr_doc['date_tesim'].map(&:to_i).first
+              # solr_doc["date_sim"] = date.first[0..3] unless date.first.nil?
 
-            solr_doc['date_tesim'] = get_all_vs('/aas:election_record/@date')
-            solr_doc['date_isi'] = solr_doc['date_tesim'].map(&:to_i).first
-            # solr_doc["date_sim"] = date.first[0..3] unless date.first.nil?
+              solr_doc['office_id_ssim'] = get_v('/aas:election_record/aas:office/@office_id')
+              solr_doc['office_role_title_tesim'] = get_all_vs('//aas:role/@title')
+              solr_doc['office_name_tesim'] = get_authority_from_nnv(solr_doc['office_id_ssim'], "office")
 
-            solr_doc['office_id_ssim'] = get_v('/aas:election_record/aas:office/@office_id')
-            solr_doc['office_role_title_tesim'] = get_all_vs('//aas:role/@title')
-            solr_doc['office_name_tesim'] = get_authority_from_nnv(solr_doc['office_id_ssim'], "office")
+              solr_doc['state_name_tesim'] = solr_doc['state_name_sim'] = get_all_vs('//aas:admin_unit[@type="State"]/@name')
 
-            solr_doc['state_name_tesim'] = solr_doc['state_name_sim'] = get_all_vs('//aas:admin_unit[@type="State"]/@name')
+              solr_doc['election_id_ssim'] = [get_v('/aas:election_record/@election_id')]
+              solr_doc['election_type_tesim'] = solr_doc['election_type_sim'] = [get_v('/aas:election_record/@type')]
 
-            solr_doc['election_id_ssim'] = [get_v('/aas:election_record/@election_id')]
-            solr_doc['election_type_tesim'] = solr_doc['election_type_sim'] = [get_v('/aas:election_record/@type')]
+              solr_doc['candidate_id_ssim'] = get_all_vs('//aas:candidate/@name_id')
+              solr_doc['candidate_name_tesim'] = get_all_vs('//aas:candidate/@name')
 
-            solr_doc['candidate_id_ssim'] = get_all_vs('//aas:candidate/@name_id')
-            solr_doc['candidate_name_tesim'] = get_all_vs('//aas:candidate/@name')
+              solr_doc['elector_name_tesim'] = get_all_vs("//aas:elector/@name")
 
-            solr_doc['elector_name_tesim'] = get_all_vs("//aas:elector/@name")
+              solr_doc['jurisdiction_tesim'] = solr_doc['jurisdiction_sim'] = [get_v('/aas:election_record/aas:office/@scope')]
 
-            solr_doc['jurisdiction_tesim'] = solr_doc['jurisdiction_sim'] = [get_v('/aas:election_record/aas:office/@scope')]
-
-            solr_doc['handle_ssi'] = get_v('/aas:election_record/@handle')
-            solr_doc['iteration_tesim'] = [get_v('/aas:election_record/@iteration')]
-            solr_doc['page_image_urn_ssim'] = get_all_vs("//aas:reference[type='page_image']/@urn")
-            solr_doc['all_text_timv'] = get_all_text(solr_doc)
+              solr_doc['handle_ssi'] = get_v('/aas:election_record/@handle')
+              solr_doc['iteration_tesim'] = [get_v('/aas:election_record/@iteration')]
+              solr_doc['page_image_urn_ssim'] = get_all_vs("//aas:reference[type='page_image']/@urn")
+              solr_doc['all_text_timv'] = get_all_text(solr_doc)
+            end
           end
         end # End super.tap
       end
