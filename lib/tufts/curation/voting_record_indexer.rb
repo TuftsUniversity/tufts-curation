@@ -134,7 +134,7 @@ module Tufts
             response = Net::HTTP.get_response(uri)
 
           rescue StandardError => error
-            Rails.logger.warning(error)
+            Rails.logger.warn(error)
             return q
           end
           response.code == "200" ? response.body : q
