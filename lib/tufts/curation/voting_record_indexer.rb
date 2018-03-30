@@ -132,11 +132,15 @@ module Tufts
             base_url = "http://elections-prod-01.lib.tufts.edu/qa/search"
             uri = URI.parse("#{base_url}/#{auth}/subjects?q=#{q}")
             response = Net::HTTP.get_response(uri)
+
+          # There doesn't appear to be any order that makes this cop happy.
+          # rubocop:disable Lint/ShadowedException
           rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError,
-       Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError,
-       Net::OpenTimeout => e
+                 Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError,
+                 Net::OpenTimeout
             return q
           end
+          # rubocop:enable Lint/ShadowedException
           response.code == "200" ? response.body : q
         end
     end # End class VotingRecordIndexer
