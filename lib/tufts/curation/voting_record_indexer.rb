@@ -53,6 +53,7 @@ module Tufts
       end
       # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/BlockLength
       # End def generate_solr_document
 
       private
