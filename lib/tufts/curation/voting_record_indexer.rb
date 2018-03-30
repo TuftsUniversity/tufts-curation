@@ -128,9 +128,15 @@ module Tufts
         # @param {str} auth
         #   The authority to search: office, party, or state.
         def get_authority_from_nnv(q, auth)
-          base_url = "http://elections-prod-01.lib.tufts.edu/qa/search"
-          uri = URI.parse("#{base_url}/#{auth}/subjects?q=#{q}")
-          response = Net::HTTP.get_response(uri)
+          begin
+            base_url = "http://elections-prod-01.lib.tufts.edu/qa/search"
+            uri = URI.parse("#{base_url}/#{auth}/subjects?q=#{q}")
+            response = Net::HTTP.get_response(uri)
+          rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError,
+       Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError,
+       Net::OpenTimeout => e
+            return q
+          end
           response.code == "200" ? response.body : q
         end
     end # End class VotingRecordIndexer
