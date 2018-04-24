@@ -34,7 +34,7 @@ module Tufts
             index.as :stored_searchable
           end
 
-          property :internal_note, predicate: ::Tufts::Vocab::Tufts.internal_note, multiple: false do |index|
+          property :internal_note, predicate: ::Tufts::Vocab::Tufts.internal_note, multiple: true do |index|
             index.as :stored_searchable
           end
 
