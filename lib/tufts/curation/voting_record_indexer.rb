@@ -15,7 +15,7 @@ module Tufts
           unless object.file_sets.nil?
             load_elections_xml(object)
             if @noko.nil?
-              Rails.logger.warn("Couldn't find the Voting Record XML for #{solr_doc.id}")
+              Rails.logger.warn("Couldn't find the Voting Record XML for #{solr_doc['id']}")
             else
               solr_doc['voting_record_xml_tesi'] = @noko.to_xml
               solr_doc['format_ssim'] = 'Election Record' # solr_doc['format_tesim']
