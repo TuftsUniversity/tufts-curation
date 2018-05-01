@@ -38,6 +38,19 @@ module Tufts
       def generate_solr_document
         super.tap do |solr_doc|
           solr_doc['pub_date_facet_isim'] = date_facet
+
+          # Batches store ids as a serialized array. To retrieve them, we query
+          # "ids LIKE...". To avoid potential substring collisions (this shouldn't
+          # happen in normal operation), we follow up by filtering the results with
+          # `#select`, before mapping to batch ids.
+          batches = Batch.where("ids LIKE '%#{object.id}%'")
+                         .select { |batch| batch.ids.include?(object.id) }
+                         .map(&:id)
+
+          unless batches.empty?
+            batch_key = Solrizer.solr_name('batch', :stored_searchable)
+            solr_doc[batch_key] = batches
+          end
         end
       end
 
