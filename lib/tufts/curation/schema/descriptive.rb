@@ -89,7 +89,7 @@ module Tufts
           property :is_replaced_by,
                    predicate: RDF::Vocab::DC.isReplacedBy do |index|
             index.as :stored_searchable
-          end          
+          end
 
           property :has_part, predicate: RDF::Vocab::DC.hasPart do |index|
             index.as :stored_searchable
