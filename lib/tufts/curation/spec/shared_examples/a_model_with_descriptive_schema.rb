@@ -89,18 +89,6 @@ shared_examples 'a model with descriptive metadata attributes' do
       .with_predicate(RDF::Vocab::DC.isReplacedBy)
   end
 
-  it 'has has format' do
-    expect(work)
-      .to have_editable_property(:has_format)
-      .with_predicate(RDF::Vocab::DC.hasFormat)
-  end
-
-  it 'has "is format of"' do
-    expect(work)
-      .to have_editable_property(:is_format_of)
-      .with_predicate(RDF::Vocab::DC.isFormatOf)
-  end
-
   it 'has "has part"' do
     expect(work)
       .to have_editable_property(:has_part)
