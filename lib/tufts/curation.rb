@@ -56,8 +56,10 @@ module Tufts
     # @yieldparam model [Class]
     #
     # @return [void]
-    def setup_models!(configuration:)
-      configuration.admin_set_predicate = Tufts::Vocab::Tufts.admin_set_member
+    def setup_models!(configuration: nil)
+      unless configuration.nil?
+        configuration.admin_set_predicate = Tufts::Vocab::Tufts.admin_set_member
+      end
 
       MODELS.each do |model_name, parent_class|
         class_name = model_name.to_s.camelize
@@ -65,7 +67,9 @@ module Tufts
 
         yield class_name.constantize if block_given?
 
-        configuration.register_curation_concern(model_name)
+        unless configuration.nil?
+          configuration.register_curation_concern(model_name)
+        end
       end
 
       Object.const_set('FileSet', Class.new(Tufts::Curation::FileSet))
