@@ -167,14 +167,15 @@ module Tufts
         #   The iiif ids.
         def get_iiif_ids(urns)
           urns.map do |urn|
-            pid = urn.sub!('central:dca:MS115:', '').sub!(':', '\:')
+            pid = urn.sub('central:dca:MS115:', '').sub(':', '\:')
             begin
-              Image.where(legacy_pid: pid).first.file_sets.first.files.first.id
+              ActiveFedora::Base.where(legacy_pid_tesim: pid).first.file_sets.first.files.first.id
             rescue StandardError
               next
             end
           end
         end
+      # end private
     end # End class VotingRecordIndexer
   end
 end
