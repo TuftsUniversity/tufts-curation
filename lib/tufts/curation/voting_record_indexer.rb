@@ -47,7 +47,7 @@ module Tufts
 
               solr_doc['handle_ssi'] = get_v('/election_record/@handle')
               solr_doc['iteration_tesim'] = [get_v('/election_record/@iteration')]
-              #solr_doc['page_image_urn_ssim'] = get_all_vs("//reference[@type='page_image']/@urn").uniq
+              # solr_doc['page_image_urn_ssim'] = get_all_vs("//reference[@type='page_image']/@urn").uniq
               solr_doc['iiif_page_images'] = get_iiif_ids(get_all_vs("//reference[@type='page_image']/@urn").uniq)
 
               solr_doc['all_text_timv'] = get_all_text(solr_doc)
