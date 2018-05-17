@@ -47,7 +47,9 @@ module Tufts
 
               solr_doc['handle_ssi'] = get_v('/election_record/@handle')
               solr_doc['iteration_tesim'] = [get_v('/election_record/@iteration')]
-              solr_doc['page_image_urn_ssim'] = get_all_vs("//reference[@type='page_image']/@urn").uniq
+              #solr_doc['page_image_urn_ssim'] = get_all_vs("//reference[@type='page_image']/@urn").uniq
+              solr_doc['iiif_page_images'] = get_iiif_ids(get_all_vs("//reference[@type='page_image']/@urn").uniq)
+
               solr_doc['all_text_timv'] = get_all_text(solr_doc)
             end
           end
@@ -62,6 +64,9 @@ module Tufts
 
         ##
         # Gets the first value from a place.
+        #
+        # @return {str}
+        #   The first value returned from xpath.
         def get_v(xpath)
           @noko.xpath(xpath).first.value
         end
@@ -71,6 +76,9 @@ module Tufts
         #
         # @param {str} xpaths
         #   The xpath strings to search
+        #
+        # @return {arr}
+        #   All the values returned by xpaths
         def get_all_vs(*xpaths)
           if xpaths.length.zero?
             Rails.logger.info("You need to pass at least one argument to get_all_vs!")
@@ -89,6 +97,9 @@ module Tufts
         #
         # @param {Hash} doc
         #   The solr document.
+        #
+        # @return {string}
+        # All the text values in the xml.
         def get_all_text(doc)
           all_text_values = []
           undesirables = ['voting_record_xml_tesi', 'object_profile_ssm']
@@ -130,6 +141,9 @@ module Tufts
         #   The search string, an id for office or party, a name for state.
         # @param {str} auth
         #   The authority to search: office, party, or state.
+        #
+        # @return {str}
+        #   Either the authority from QA or the original term if no authority is found.
         def get_authority_from_nnv(q, auth)
           begin
             base_url = "http://elections-prod-01.lib.tufts.edu/qa/search"
@@ -141,6 +155,25 @@ module Tufts
             return q
           end
           response.code == "200" ? response.body : q
+        end
+
+        ##
+        # Translates Fedora 3 urns to IIIF ids.
+        #
+        # @param {arr} urns
+        #   The Fedora 3 urns.
+        #
+        # @return {arr}
+        #   The iiif ids.
+        def get_iiif_ids(urns)
+          urns.map do |urn|
+            pid = urn.sub!('central:dca:MS115:', '').sub!(':', '\:')
+            begin
+              Image.where(legacy_pid: pid).first.file_sets.first.files.first.id
+            rescue StandardError
+              next
+            end
+          end
         end
     end # End class VotingRecordIndexer
   end
