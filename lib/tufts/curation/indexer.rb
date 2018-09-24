@@ -51,6 +51,8 @@ module Tufts
             batch_key = Solrizer.solr_name('batch', :stored_searchable)
             solr_doc[batch_key] = batches
           end
+
+          solr_doc['discover_access_group_ssim'] = ['public']
         end
       end
 
