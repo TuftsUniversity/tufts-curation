@@ -52,7 +52,8 @@ module Tufts
             solr_doc[batch_key] = batches
           end
 
-          if solr_doc['displays_in_tesim'].include?('dl')
+          displays_in = solr_doc['displays_in_tesim']
+          if displays_in.present? && displays_in.include?('dl')
             solr_doc['discover_access_group_ssim'] = ['public']
           end
         end
