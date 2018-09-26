@@ -52,7 +52,7 @@ module Tufts
               batch_key = Solrizer.solr_name('batch', :stored_searchable)
               solr_doc[batch_key] = batches
             end
-          rescue NameError
+          rescue NameError => e
             # TDLR-956 - tdl_on_hyrax will raise NameError exception because Batch is uninitialized.
             # Ignore this for now  but figure out why it has started happening and fix it.
           end
