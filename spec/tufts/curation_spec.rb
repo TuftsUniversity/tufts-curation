@@ -8,7 +8,6 @@ describe Tufts::Curation do
     let(:configuration) { configuration_class.new }
 
     let(:configuration_class) do
-      # rubocop:disable RSpec/InstanceVariable
       Class.new do
         attr_accessor :admin_set_predicate
         attr_reader :registered_concerns

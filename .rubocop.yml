@@ -4,11 +4,18 @@ inherit_gem:
 Lint/HandleExceptions:
   Exclude:
     - lib/tufts/curation/indexer.rb
+Metrics/AbcSize:
+  Exclude:
+    - 'lib/tufts/curation/indexer.rb'
+Style/GuardClause:
+  Exclude:
+    - 'lib/tufts/curation/indexer.rb'
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'lib/tufts/curation/spec/**/*'
     - 'lib/tufts/curation/schema/**/*'
+    - 'tufts-curation.gemspec'
 Metrics/MethodLength:
   Exclude:
     - lib/tufts/curation/indexer.rb
@@ -16,3 +23,12 @@ Naming/FileName:
   Exclude:
     - '**/Gemfile'
     - '*.gemspec'
+Metrics/ClassLength:
+  Exclude:
+    - 'lib/tufts/curation/indexer.rb'
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'lib/tufts/curation/indexer.rb'
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/tufts/curation/indexer.rb'

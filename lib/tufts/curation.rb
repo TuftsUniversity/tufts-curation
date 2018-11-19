@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-c42434073491') }
-if hyrax_path.nil?
-  hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-2') }
-end
+hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-2') } if hyrax_path.nil?
 $LOAD_PATH.unshift(Pathname.new(hyrax_path).join('..', 'app').to_s)
 
 require 'active_fedora'
@@ -57,9 +55,7 @@ module Tufts
     #
     # @return [void]
     def setup_models!(configuration: nil)
-      unless configuration.nil?
-        configuration.admin_set_predicate = Tufts::Vocab::Tufts.admin_set_member
-      end
+      configuration.admin_set_predicate = Tufts::Vocab::Tufts.admin_set_member unless configuration.nil?
 
       MODELS.each do |model_name, parent_class|
         class_name = model_name.to_s.camelize
@@ -67,9 +63,7 @@ module Tufts
 
         yield class_name.constantize if block_given?
 
-        unless configuration.nil?
-          configuration.register_curation_concern(model_name)
-        end
+        configuration.register_curation_concern(model_name) unless configuration.nil?
       end
 
       Object.const_set('FileSet', Class.new(Tufts::Curation::FileSet))
