@@ -158,7 +158,7 @@ module Tufts
                 date = date[0..3] += "-01-01"
               end
               unparsed_date = Chronic.parse(date)
-              valid_date = Time.at(unparsed_date).in_time_zone("America/New York") unless unparsed_date.nil?
+              valid_date = Time.at(unparsed_date).in_time_zone("Eastern Time (US & Canada)") unless unparsed_date.nil?
             end
             valid_date_string = if date == "0"
                                   "0"
