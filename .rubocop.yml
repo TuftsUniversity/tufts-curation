@@ -16,6 +16,7 @@ Metrics/BlockLength:
     - 'lib/tufts/curation/spec/**/*'
     - 'lib/tufts/curation/schema/**/*'
     - 'tufts-curation.gemspec'
+    - 'lib/tufts/curation/indexer.rb'
 Metrics/MethodLength:
   Exclude:
     - lib/tufts/curation/indexer.rb

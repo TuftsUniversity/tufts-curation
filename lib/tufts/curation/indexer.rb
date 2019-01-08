@@ -40,10 +40,38 @@ module Tufts
           solr_doc['pub_date_facet_isim'] = date_facet
           index_sort_fields solr_doc
           create_facets solr_doc
-          index_aggregate_date solr_doc
+
+          solr_doc['aggregate_date_tesim'] = date_facet + aggregate_date
+
+          # used in trove
           create_formatted_fields solr_doc
+
           index_format_info solr_doc
-          index_pub_date solr_doc
+          index_pub_date_for_sorting solr_doc
+
+          begin
+
+            if object.file_sets && !object.file_sets.empty?
+              solr_doc["file_set_date_created_tesim"] = object.file_sets[0].characterization_proxy.date_created.first.to_s
+              unless object.file_sets[0].characterization_proxy.date_created.empty?
+                date_string = object.file_sets[0].characterization_proxy.date_created.first.to_s
+
+                values = date_string.split(' ').first.split(':')
+                date_string = values[0] + '-' + values[1] + '-' + values[2] if values.length >= 2
+
+                solr_doc["file_set_date_created_simplified_tesim"] = [date_string]
+              end
+            end
+          rescue
+            logger.warn("issue indexing file set date created for #{object.id}")
+          end
+
+          begin
+            solr_doc["file_set_format_tesim"] = [object.file_sets[0].characterization_proxy.format_label] if object.file_sets && !object.file_sets.empty?
+          rescue
+            logger.warn("issue indexing file set format for #{object.id}")
+          end
+
           begin
             # Batches store ids as a serialized array. To retrieve them, we query
             # "ids LIKE...". To avoid potential substring collisions (this shouldn't
@@ -72,11 +100,13 @@ module Tufts
 
       private
 
-        def index_pub_date(solr_doc)
+        def index_pub_date_for_sorting(solr_doc)
           dates = Array(object.primary_date)
 
           dates = Array(object.temporal) if dates.empty?
+
           dates = ['n.d.'] if dates == [""]
+
           unless dates.empty?
             date = dates[0]
 
@@ -158,7 +188,7 @@ module Tufts
                 date = date[0..3] += "-01-01"
               end
               unparsed_date = Chronic.parse(date)
-              valid_date = Time.at(unparsed_date).in_time_zone("Eastern Time (US & Canada)") unless unparsed_date.nil?
+              valid_date = Time.at(unparsed_date).in_time_zone unless unparsed_date.nil?
             end
             valid_date_string = if date == "0"
                                   "0"
@@ -166,14 +196,15 @@ module Tufts
                                   valid_date.strftime("%Y")
                                 end
             # puts "valid date string: #{valid_date_string}"
-            Solrizer.insert_field(solr_doc, 'pub_date_improved', valid_date_string.to_i, :stored_sortable)
+            Solrizer.insert_field(solr_doc, 'pub_date_sortable', valid_date_string.to_i, :stored_sortable)
           end
         end
 
-        def index_aggregate_date(solr_doc)
+        def aggregate_date
           aggregate_date = temporal_and_created
 
           aggregate_date.each do |date|
+            aggregate_date += extract_year(date)
             date = format_dd_mm_yyyy(date)
             date = format_nd(date)
             date = format_yyyy_mm_dd(date)
@@ -181,7 +212,9 @@ module Tufts
             aggregate_date += Array(date)
           end
 
-          Solrizer.insert_field(solr_doc, 'aggregate_date', aggregate_date, :stored_searchable)
+          aggregate_date.reject! { |val| val.to_s.include? ":" }
+
+          aggregate_date
         end
 
         def index_format_info(solr_doc)
@@ -207,23 +240,12 @@ module Tufts
                       "Videos"
                     when "Rcr"
                       "Collection Creators"
+                    else
+                      return
+                      # COLLECTION_ERROR_LOG.error "Could not determine Format for : #{pid} with model #{model.inspect}"
                     end
 
           Solrizer.insert_field(solr_doc, 'object_type', model_s, :facetable) if model_s
-
-          # Solrizer.insert_field(solr_doc, 'object_type', model_s, :facetable) if model_s
-          # Solrizer.insert_field(solr_doc, 'object_type', model_s, :symbol) if model_s
-
-          # At this point primary classification is complete but there are some outlier cases where we want to
-          # Attribute two classifications to one object, now's the time to do that
-          # #,"info:fedora/cm:Audio.OralHistory","info:fedora/afmodel:TuftsAudioText" -> needs text
-          # #,"info:fedora/cm:Image.HTML" -->needs text
-          # if ["info:fedora/cm:Audio","info:fedora/afmodel:TuftsAudio","info:fedora/afmodel:TuftsVideo"].include? model
-          #  unless self.datastreams['ARCHIVAL_XML'].dsLocation.nil?
-          #    Solrizer.insert_field(solr_doc, 'object_type', 'Text', :facetable)
-          #    Solrizer.insert_field(solr_doc, 'object_type', 'Text', :symbol)
-          #  end
-          # end
         end
 
         def create_formatted_fields(solr_doc)
@@ -261,7 +283,7 @@ module Tufts
             date = date.delete(" ")
           end
 
-          if (/^Circa \d{4} -- \d{4}$/ =~ date) || (/^circa \d{4}--\d{4}$/ =~ date)
+          if (/^Circa \d{4} -- \d{4}$/ =~ date) || (/^circa \d{4}--\d{4}$/ =~ date) || (/^circa \d{4} -- \d{4}$/ =~ date)
             earliest, latest = date.split('--').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
@@ -287,8 +309,27 @@ module Tufts
 
         def temporal_and_created
           dates = []
-          dates += object.date_created.to_a
+          # dates += object.date_created.to_a
+          dates += object.primary_date.to_a
           dates += object.temporal.to_a
+          date_created = []
+
+          begin
+            if object.file_sets && !object.file_sets.empty?
+              #    date_created += [object.file_sets[0].characterization_proxy.date_created.first.to_s]
+              unless object.file_sets[0].characterization_proxy.date_created.empty?
+                date_string = object.file_sets[0].characterization_proxy.date_created.first.to_s
+
+                values = date_string.split(' ').first.split(':')
+                date_string = values[0] + '-' + values[1] + '-' + values[2] if values.length >= 2
+
+                date_created += [date_string]
+              end
+            end
+          rescue
+          end
+
+          dates += date_created
           dates
         end
 
@@ -357,6 +398,7 @@ module Tufts
         # @return [Array<Integer>] the four digit integer(s) corresponding to year(s) in the date or date range
         def extract_year(date)
           date = preflight_date(date)
+
           if date.blank? || date[/n\.d/]
             []
           elsif /^\d{4}$/ =~ date
@@ -366,6 +408,27 @@ module Tufts
             # date range in YYYY-YYYY format
             earliest, latest = date.split('-').flat_map(&:to_i)
             (earliest..latest).to_a
+          elsif (/^Circa \d{4} – \d{4}$/ =~ date) || (/^Circa \d{4}–\d{4}$/ =~ date) || (/^circa \d{4} – \d{4}$/ =~ date) || (/^circa \d{4}–\d{4}$/ =~ date)
+            date.gsub!("Circa", "")
+            date.gsub!("circa", "")
+            date.delete!(" ")
+            begin
+              (earliest..latest).to_a
+            rescue TypeError
+              logger.error "TypeError: can't iterate from NilClass for #{date}"
+              return []
+            end
+          elsif (/^Circa \d{4} -- \d{4}$/ =~ date) || (/^circa \d{4}--\d{4}$/ =~ date) || (/^circa \d{4} -- \d{4}$/ =~ date)
+            date.gsub!("Circa", "")
+            date.gsub!("circa", "")
+            date.delete!(" ")
+            begin
+              earliest, latest = date.split('--').flat_map(&:to_i)
+              (earliest..latest).to_a
+            rescue TypeError
+              logger.error "TypeError: can't iterate from NilClass for #{date}"
+              return []
+            end
           else
             [Date.iso8601(date).year]
           end
@@ -379,7 +442,7 @@ module Tufts
         # @param date [String]
         def preflight_date(date)
           # remove trailing period
-          date.chomp('.')
+          date.chomp('.').strip
         end
     end
   end
