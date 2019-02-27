@@ -13,6 +13,7 @@ require 'tufts/curation/file_set'
 
 require 'tufts/curation/audio'
 require 'tufts/curation/ead'
+require 'tufts/curation/ead_indexer'
 require 'tufts/curation/generic_object'
 require 'tufts/curation/image'
 require 'tufts/curation/pdf'

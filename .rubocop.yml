@@ -33,3 +33,6 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Exclude:
     - 'lib/tufts/curation/indexer.rb'
+RSpec/InstanceVariable:
+  Exclude:
+    - 'spec/**/*'
