@@ -20,6 +20,7 @@ if(Rails.env == "test" || Rails.env == "development")
     version: '6.3.0',
     instance_dir: 'solr/install'
   }
+end
 
 desc 'Run style checker'
 RuboCop::RakeTask.new(:rubocop) do |task|
