@@ -35,6 +35,7 @@ module Tufts
         term :ordered_descriptions
         term :downloadable
         term :geog_name
+        term :aspace_cuid
       end
     end
   end

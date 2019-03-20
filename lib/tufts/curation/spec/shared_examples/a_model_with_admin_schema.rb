@@ -109,6 +109,12 @@ shared_examples 'a model with admin metadata attributes' do
       .with_predicate(Tufts::Vocab::Tufts.creator_department)
   end
 
+  it 'has aspace_cuid' do
+    expect(work)
+      .to have_editable_property(:aspace_cuid)
+      .with_predicate(Tufts::Vocab::Tufts.aspace_cuid)
+  end
+
   it 'has createdby' do
     expect(work)
       .to have_editable_property(:createdby)

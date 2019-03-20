@@ -93,6 +93,10 @@ module Tufts
           property :tufts_license, predicate: ::RDF::Vocab::DC.license do |index|
             index.as :stored_searchable
           end
+
+          property :aspace_cuid, predicate: ::Tufts::Vocab::Tufts.aspace_cuid, multiple: false do |index|
+            index.as :stored_searchable
+          end
         end
 
         def mark_reviewed
