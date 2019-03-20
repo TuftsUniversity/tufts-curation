@@ -13,14 +13,12 @@ require 'active_fedora/rake_support'
 
 Bundler::GemHelper.install_tasks
 
-if(Rails.env == "test" || Rails.env == "development")
-  SolrWrapper.default_instance_options = {
-    verbose: true,
-    port: 8984,
-    version: '6.3.0',
-    instance_dir: 'solr/install'
-  }
-end
+SolrWrapper.default_instance_options = {
+  verbose: true,
+  port: 8984,
+  version: '6.3.0',
+  instance_dir: 'solr/install'
+}
 
 desc 'Run style checker'
 RuboCop::RakeTask.new(:rubocop) do |task|
