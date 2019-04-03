@@ -17,6 +17,9 @@ module Tufts
         term :displays_in
         term :term_of_restriction
         term :visibility
+        term :visibility_during_embargo
+        term :visibility_after_embargo
+        term :embargo_release_date
         term :batch_id
         term :namespace
         term :is_notes_of
