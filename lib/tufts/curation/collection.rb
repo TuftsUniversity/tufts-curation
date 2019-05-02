@@ -23,6 +23,10 @@ module Tufts
         index.as :stored_searchable
       end
 
+      property :displays_in, predicate: ::Tufts::Vocab::Tufts.displays_in do |index|
+        index.as :stored_searchable
+      end
+
       include Tufts::Curation::Schema::Ordered
 
       # This must be included at the end, because it finalizes the metadata
