@@ -15,13 +15,12 @@ Gem::Specification.new do |gem|
   gem.files         = %w[AUTHORS CHANGELOG.md README.md LICENSE] +
                       Dir.glob('lib/**/*.rb')
   gem.require_paths = %w[lib]
-  gem.has_rdoc      = false
 
   gem.required_ruby_version = '>= 2.3.4'
 
   gem.add_dependency 'activesupport'
   gem.add_dependency 'active-fedora', '>= 11.5', '<= 12.99'
-  gem.add_dependency 'hyrax',         '>= 2.0.0', '< 2.5.0'
+  gem.add_dependency 'hyrax',         '>= 2.0.0', '< 2.6.0'
   gem.add_dependency 'chronic'
   gem.add_development_dependency 'yard',         '~> 0.9'
   gem.add_development_dependency 'bixby',        '~> 1.0'
