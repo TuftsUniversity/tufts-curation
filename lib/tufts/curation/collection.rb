@@ -36,7 +36,7 @@ module Tufts
       include Tufts::Curation::Schema::OrderedOverrides
 
       def work_order
-        Tufts::Curation::CollectionOrder.where(collection_id: self.id).first
+        Tufts::Curation::CollectionOrder.where(collection_id: id).first
       end
     end
   end
