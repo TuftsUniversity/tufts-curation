@@ -34,6 +34,10 @@ module Tufts
       include Hyrax::BasicMetadata
 
       include Tufts::Curation::Schema::OrderedOverrides
+
+      def work_order
+        Tufts::Curation::CollectionOrder.where(collection_id: self.id).first
+      end
     end
   end
 end
