@@ -1,6 +1,6 @@
 module Tufts
   module Curation
-    class CollectionOrder < ::ActiveRecord::Base
+    class CollectionOrder < ActiveRecord::Base
       self.table_name = 'tufts_collection_orders'
 
       validates :collection_id, presence: true, uniqueness: true

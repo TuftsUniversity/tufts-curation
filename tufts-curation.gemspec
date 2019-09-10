@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.3.4'
 
+  gem.add_dependency 'activerecord'
   gem.add_dependency 'activesupport'
   gem.add_dependency 'active-fedora', '>= 11.5', '<= 12.99'
   gem.add_dependency 'hyrax',         '>= 2.0.0', '< 2.6.0'
