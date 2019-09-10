@@ -38,9 +38,11 @@ module Tufts
       ##
       # @function
       # Shortening the code to access the actual work-order data.
+      # rubocop:disable Rails/Delegate
       def work_order
         collection_order_obj.work_order
       end
+      # rubocop:enable Rails/Delegate
 
       ##
       # @function
@@ -55,14 +57,12 @@ module Tufts
 
 
       private
-
         ##
         # @function
         # Get the CollectionOrder object related to the Collection.
         def collection_order_obj
           @collection_order_obj ||= Tufts::Curation::CollectionOrder.where(collection_id: id).first
         end
-
     end
   end
 end
