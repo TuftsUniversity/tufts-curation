@@ -55,8 +55,8 @@ module Tufts
         collection_order_obj.save
       end
 
-
       private
+
         ##
         # @function
         # Get the CollectionOrder object related to the Collection.
