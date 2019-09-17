@@ -1,3 +1,5 @@
+require 'active_record'
+
 module Tufts
   module Curation
     class CollectionOrder < ::ActiveRecord::Base
