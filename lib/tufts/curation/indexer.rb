@@ -407,7 +407,11 @@ module Tufts
           elsif /^\d{4}-\d{4}$/ =~ date
             # date range in YYYY-YYYY format
             earliest, latest = date.split('-').flat_map(&:to_i)
-            (earliest..latest).to_a
+            begin
+              (earliest..latest).to_a
+            rescue RangeError
+              (earliest).to_a
+            end
           elsif (/^Circa \d{4} – \d{4}$/ =~ date) || (/^Circa \d{4}–\d{4}$/ =~ date) || (/^circa \d{4} – \d{4}$/ =~ date) || (/^circa \d{4}–\d{4}$/ =~ date)
             date.gsub!("Circa", "")
             date.gsub!("circa", "")
