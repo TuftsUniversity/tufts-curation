@@ -27,6 +27,10 @@ module Tufts
         index.as :stored_searchable
       end
 
+      property :legacy_pid, predicate: ::Tufts::Vocab::Tufts.legacy_pid, multiple: false do |index|
+        index.as :stored_searchable
+      end
+
       include Tufts::Curation::Schema::Ordered
 
       # This must be included at the end, because it finalizes the metadata
