@@ -39,44 +39,7 @@ module Tufts
 
       include Tufts::Curation::Schema::OrderedOverrides
 
-      before_destroy :destroy_collection_orders
-
-      ##
-      # @function
-      # Shortening the code to access the actual work-order data.
-      # rubocop:disable Rails/Delegate
-      def work_order
-        collection_order_obj.work_order
-      end
-      # rubocop:enable Rails/Delegate
-
-      ##
-      # @function
-      # Update the work_order of this collection, via the referenced CollectionOrder obj.
-      #
-      # @param (Array) new_order
-      #   The new order for the Collection.
-      def update_work_order(new_order)
-        collection_order_obj.work_order = new_order
-        collection_order_obj.save
-      end
-
-      private
-
-        ##
-        # @function
-        # Destroys any orders associated with collection before destroying collection.
-        def destroy_collection_orders
-          collection_orders = Tufts::Curation::CollectionOrder.where(collection_id: id)
-          collection_orders.each { |o| o.destroy } unless collection_orders.empty?
-        end
-
-        ##
-        # @function
-        # Get the CollectionOrder object related to the Collection.
-        def collection_order_obj
-          @collection_order_obj ||= Tufts::Curation::CollectionOrder.where(collection_id: id).first
-        end
+      include Tufts::Curation::CollectionOrderSupport
     end
   end
 end
