@@ -66,6 +66,7 @@ module Tufts
         ##
         # @function
         # Destroys any orders associated with collection before destroying collection.
+        # rubocop:disable Style/SymbolProc
         def destroy_collection_orders
           collection_orders = Tufts::Curation::CollectionOrder.where(collection_id: id)
           collection_orders.each { |o| o.destroy } unless collection_orders.empty?
