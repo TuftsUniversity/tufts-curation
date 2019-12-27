@@ -72,7 +72,6 @@ module Tufts
             Tufts::Curation::CollectionOrder.where(collection_id: id, item_type: type).first!
           rescue
             Tufts::Curation::CollectionOrder.create!(collection_id: id, item_type: type)
-          end
         end
 
         ##
