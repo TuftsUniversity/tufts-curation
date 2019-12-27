@@ -421,6 +421,9 @@ module Tufts
             rescue TypeError
               logger.error "TypeError: can't iterate from NilClass for #{date}"
               return []
+            rescue RangeError
+              logger.error "Range Error for #{date}"
+              return []
             end
           elsif (/^Circa \d{4} -- \d{4}$/ =~ date) || (/^circa \d{4}--\d{4}$/ =~ date) || (/^circa \d{4} -- \d{4}$/ =~ date)
             date.gsub!("Circa", "")
@@ -431,6 +434,9 @@ module Tufts
               (earliest..latest).to_a
             rescue TypeError
               logger.error "TypeError: can't iterate from NilClass for #{date}"
+              return []
+            rescue RangeError
+              logger.error "Range Error for #{date}"
               return []
             end
           else
