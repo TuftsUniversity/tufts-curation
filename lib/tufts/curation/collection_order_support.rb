@@ -69,9 +69,9 @@ module Tufts
         # @param {sym} type
         #   :work or :subcollection - everything else will error.
         def retrieve_or_create_collection_order(type)
-            Tufts::Curation::CollectionOrder.where(collection_id: id, item_type: type).first!
-          rescue
-            Tufts::Curation::CollectionOrder.create!(collection_id: id, item_type: type)
+          Tufts::Curation::CollectionOrder.where(collection_id: id, item_type: type).first!
+        rescue
+          Tufts::Curation::CollectionOrder.create!(collection_id: id, item_type: type)
         end
 
         ##
