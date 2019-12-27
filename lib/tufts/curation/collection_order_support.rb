@@ -69,7 +69,6 @@ module Tufts
         # @param {sym} type
         #   :work or :subcollection - everything else will error.
         def retrieve_or_create_collection_order(type)
-          begin
             Tufts::Curation::CollectionOrder.where(collection_id: id, item_type: type).first!
           rescue
             Tufts::Curation::CollectionOrder.create!(collection_id: id, item_type: type)
@@ -81,7 +80,7 @@ module Tufts
         # Destroys any orders associated with collection before destroying collection.
         def destroy_collection_orders
           collection_orders = Tufts::Curation::CollectionOrder.where(collection_id: id)
-          collection_orders.each { |o| o.destroy } unless collection_orders.empty?
+          collection_orders.each(&:destroy) unless collection_orders.empty?
         end
     end
   end
