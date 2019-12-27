@@ -8,7 +8,7 @@ module Tufts
       enum item_type: [:work, :subcollection]
 
       validates :item_type, presence: true
-      validates :collection_id, presence: true, uniqueness: true { scope: :item_type }
+      validates :collection_id, presence: true, uniqueness: { scope: :item_type }
 
       ##
       # @function

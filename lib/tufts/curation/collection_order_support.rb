@@ -4,6 +4,8 @@
 module Tufts
   module Curation
     module CollectionOrderSupport
+      extend ActiveSupport::Concern
+
       included do
         before_destroy :destroy_collection_orders
       end

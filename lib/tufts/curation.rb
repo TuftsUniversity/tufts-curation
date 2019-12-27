@@ -8,8 +8,9 @@ require 'rdf/vocab'
 
 require 'tufts/curation/indexer'
 require 'tufts/curation/tufts_model'
-require 'tufts/curation/collection'
 require 'tufts/curation/collection_order'
+require 'tufts/curation/collection_order_support'
+require 'tufts/curation/collection'
 require 'tufts/curation/file_set'
 
 require 'tufts/curation/audio'
