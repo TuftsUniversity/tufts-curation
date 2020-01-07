@@ -14,14 +14,14 @@ module Tufts
       # @function
       # Shortening the code to access the actual work-order json.
       def work_order
-        work_order_obj.order.nil? [] : JSON.parse(work_order_obj.order)
+        work_order_obj.order.nil? ? [] : JSON.parse(work_order_obj.order)
       end
 
       ##
       # @function
       # Shortening the code to access the actual subcollection-order json.
       def subcollection_order
-        subcollection_order_obj.order.nil? [] : JSON.parse(subcollection_order_obj.order)
+        subcollection_order_obj.order.nil? ? [] : JSON.parse(subcollection_order_obj.order)
       end
 
       ##
