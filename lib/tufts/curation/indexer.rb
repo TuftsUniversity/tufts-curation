@@ -49,7 +49,7 @@ module Tufts
           index_format_info solr_doc
           index_pub_date_for_sorting solr_doc
 
-          add_dl_collections_facet solr_doc
+          solr_doc = add_dl_collections_facet(solr_doc)
           begin
 
             if object.file_sets && !object.file_sets.empty?
@@ -458,8 +458,8 @@ module Tufts
 
         # Creates a special collections facet for the DL to use, to remove NNV collections from DL.
         def add_dl_collections_facet(solr_doc)
-          colls = object.member_of_collections.map(&:first_title)
-          Solrizer.insert_field(solr_doc, 'dl_member_of_collections', colls, :facetable) unless colls.empty?
+          solr_doc['dl_member_of_collections_ssim'] = object.member_of_collections.map(&:first_title)
+          solr_doc
         end
     end
   end
