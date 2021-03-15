@@ -175,7 +175,11 @@ module Tufts
             end
           end
         end
-      # end private
+
+        # Remove NNV collections from DL collections facet.
+        def add_dl_collections_facet(solr_doc)
+          solr_doc
+        end
     end # End class VotingRecordIndexer
   end
 end
