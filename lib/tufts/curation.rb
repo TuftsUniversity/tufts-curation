@@ -4,6 +4,7 @@ hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-2') } if hyrax_path.n
 $LOAD_PATH.unshift(Pathname.new(hyrax_path).join('..', 'app').to_s)
 
 require 'active_fedora'
+require 'solrizer'
 require 'rdf/vocab'
 
 require 'tufts/curation/indexer'
