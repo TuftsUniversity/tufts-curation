@@ -129,7 +129,7 @@ module Tufts
             index.as :stored_searchable
           end
 
-          property :access_rights, predicate: RDF::Vocab::DC.accessRights do |index|
+          property :dc_access_rights, predicate: RDF::Vocab::DC.accessRights do |index|
             index.as :stored_searchable
           end
 
