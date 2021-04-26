@@ -39,6 +39,7 @@ module Tufts
         term :downloadable
         term :geog_name
         term :aspace_cuid
+        term :oclc
       end
     end
   end

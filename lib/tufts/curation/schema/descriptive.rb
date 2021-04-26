@@ -128,6 +128,22 @@ module Tufts
           property :is_part_of, predicate: RDF::Vocab::DC.isPartOf do |index|
             index.as :stored_searchable
           end
+
+          property :dc_access_rights, predicate: RDF::Vocab::DC.accessRights do |index|
+            index.as :stored_searchable
+          end
+
+          property :doi, predicate: RDF::Vocab::Bibframe.doi, multiple: false do |index|
+            index.as :stored_searchable, :facetable
+          end
+
+          property :isbn, predicate: RDF::Vocab::Bibframe.isbn do |index|
+            index.as :stored_searchable, :facetable
+          end
+
+          property :oclc, predicate: ::Tufts::Vocab::Tufts.oclc do |index|
+            index.as :stored_searchable
+          end
         end
       end
     end
