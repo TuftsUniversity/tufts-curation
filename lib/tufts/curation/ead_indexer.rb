@@ -44,7 +44,7 @@ module Tufts
           end # end each file set
         end
 
-        def self.find_indexable_fields(id, results)
+        def find_indexable_fields(id, results)
            document_fedora = ActiveFedora::Base.find(id)
            document_ead = Nokogiri::XML(document_fedora.file_sets.first.original_file.content)
            document_ead.remove_namespaces!
@@ -70,7 +70,7 @@ module Tufts
            true
          end
 
-         def self.find_controlaccess(node, results)
+         def find_controlaccess(node, results)
              controlaccess = node.xpath('./controlaccess')
 
              return false if controlaccess.empty?
@@ -87,7 +87,7 @@ module Tufts
              true
            end
 
-           def self.find_dsc(node, results)
+           def find_dsc(node, results)
              dsc = node.xpath('./dsc')
 
              return false if dsc.empty?
@@ -99,7 +99,7 @@ module Tufts
              true
            end
 
-           def self.find_series(node, results, level = 0)
+           def find_series(node, results, level = 0)
              if level == 0
                level_string = ''
                next_level = 0
@@ -120,7 +120,7 @@ module Tufts
              true
            end
 
-           def self.find_tag(node, tag, results)
+           def find_tag(node, tag, results)
              subnodes = node.xpath('./' + tag)
 
              return false if subnodes.empty?
