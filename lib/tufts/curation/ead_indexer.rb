@@ -9,7 +9,7 @@ module Tufts
         super.tap do |solr_doc|
 
           results = {}
-          id = solr_doc['id']
+          id = object.id
           find_indexable_fields(id, results)
           puts "#{results}"
           # Only do this after the indexer has the file_set
