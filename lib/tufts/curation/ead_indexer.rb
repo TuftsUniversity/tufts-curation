@@ -14,7 +14,11 @@ module Tufts
           #puts "#{results}"
           results.each do |field_name, field_values|
             #puts("  #{field_name}")
-            solr_doc["#{field_name}_tesim"] += field_values
+            if solr_doc["#{field_name}_tesim"].nil?
+              solr_doc["#{field_name}_tesim"] = field_values
+            else
+              solr_doc["#{field_name}_tesim"] += field_values
+            end
               #[object.file_sets[0].characterization_proxy.format_label] if object.file_sets && !object.file_sets.empty?
 
             #field_values.each do |field_value|
