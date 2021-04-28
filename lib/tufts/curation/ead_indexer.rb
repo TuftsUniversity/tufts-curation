@@ -11,7 +11,16 @@ module Tufts
           results = {}
           id = object.id
           find_indexable_fields(id, results)
-          puts "#{results}"
+          #puts "#{results}"
+          results.each do |field_name, field_values|
+            #puts("  #{field_name}")
+            solr_doc["#{field_name}_tesim"] <<  field_values
+              #[object.file_sets[0].characterization_proxy.format_label] if object.file_sets && !object.file_sets.empty?
+
+            #field_values.each do |field_value|
+           #    puts("    #{field_value}")
+            #end
+          end
           # Only do this after the indexer has the file_set
           unless object.file_sets.nil?
             load_ead_xml(object)
