@@ -10,7 +10,7 @@ module Tufts
 
           results = {}
           id = solr_doc['id']
-          EadsHelper.find_indexable_fields(id, results)
+          find_indexable_fields(id, results)
           puts "#{results}"
           # Only do this after the indexer has the file_set
           unless object.file_sets.nil?
