@@ -95,7 +95,7 @@ module Tufts
              find_tag(controlaccess, 'geogname', results)
              find_tag(controlaccess, 'genreform', results)
              find_tag(controlaccess, 'subject', results)
-             find_tag(controlaccess, 'title', results)
+             #find_tag(controlaccess, 'title', results)
 
              true
            end
