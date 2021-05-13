@@ -29,11 +29,15 @@ module Tufts
           end
           # Only do this after the indexer has the file_set
           unless object.file_sets.nil?
-            load_ead_xml(object)
-            if @noko.nil?
-              Rails.logger.warn("Couldn't find the Ead XML for #{solr_doc['id']}")
-            else
-              solr_doc['all_text_timv'] = @noko.xpath('//text()').text.gsub(/[^0-9A-Za-z]/, ' ')
+            begin
+              load_ead_xml(object)
+              if @noko.nil?
+                Rails.logger.warn("Couldn't find the Ead XML for #{solr_doc['id']}")
+              else
+                solr_doc['all_text_timv'] = @noko.xpath('//text()').text.gsub(/[^0-9A-Za-z]/, ' ')
+              end
+            rescue NoMethodError => exception
+              Rails.logger.warn("#{exception.class}: #{exception.message}")
             end
           end
         end # End super.tap
