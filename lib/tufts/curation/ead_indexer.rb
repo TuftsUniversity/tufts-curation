@@ -6,7 +6,6 @@ module Tufts
     class EadIndexer < Tufts::Curation::Indexer
       # The Nokogiri document
       attr_accessor :noko
-
       # rubocop:disable Metrics/MethodLength
       def generate_solr_document
         super.tap do |solr_doc|
@@ -33,9 +32,6 @@ module Tufts
           end
         end # End super.tap
       end
-      # rubocop:enable Metrics/AbcSize
-      # rubocop:enable Metrics/MethodLength
-      # rubocop:enable Metrics/BlockLength
       # End def generate_solr_document
 
       private
@@ -44,43 +40,50 @@ module Tufts
           # rubocop:disable Style/GuardClause
           if active_fedora_obj.file_sets && !active_fedora_obj.file_sets.empty?
             active_fedora_obj.file_sets.each do |file_set|
-              f = file_set.original_file
               begin
-                xml = Nokogiri::XML(f.content)
-                next unless xml.xpath('/*').first.name == 'ead'
-              rescue
-                next
+                f = file_set.original_file
+                begin
+                  xml = Nokogiri::XML(f.content)
+                  next unless xml.xpath('/*').first.name == 'ead'
+                rescue
+                  next
+                end
+                xml.remove_namespaces!
+                @noko = xml
+              rescue NoMethodError
+                true
               end
-              xml.remove_namespaces!
-              @noko = xml
             end # end each file set
           end
         end
 
-        # rubocop:disable Metrics/MethodLength
         def find_indexable_fields(id, results)
           document_fedora = ActiveFedora::Base.find(id)
           if docuemnt_fedora.file_sets && !docuemnt_fedora.file_sets.empty?
-            document_ead = Nokogiri::XML(document_fedora.file_sets.first.original_file.content)
-            document_ead.remove_namespaces!
+            begin
+               document_ead = Nokogiri::XML(document_fedora.file_sets.first.original_file.content)
+               document_ead.remove_namespaces!
 
-            archdescs = document_ead.xpath('//ead/archdesc')
+               archdescs = document_ead.xpath('//ead/archdesc')
 
-            return false if archdescs.empty?
+               return false if archdescs.empty?
 
-            archdescs.each do |archdesc|
-              find_controlaccess(archdesc, results)
-              find_dsc(archdesc, results)
-            end
+               archdescs.each do |archdesc|
+                 find_controlaccess(archdesc, results)
+                 find_dsc(archdesc, results)
+               end
 
-            # results is a hash table whose keys are field names and values are hash tables with field values as both key and value, like:
-            # {"genreform"=>{"Diaries"=>"Diaries", "Sketchbooks"=>"Sketchbooks"}, "subject"=>{"Adolescence"=>"Adolescence", "Advertising"=>"Advertising"}}.
-            # The reason to have hash tables within hash tables is for best insertion performance and so that field values aren't duplicated, but
-            # it's a little confusing as a returned result, so convert the inner hash tables to arrays so that the above example would look like"
-            # {"genreform"=>["Diaries", "Sketchbooks"], "subject"=>["Adolescence", "Advertising"]}.
-            results.each do |field_name, field_values|
-              results[field_name] = field_values.keys
-            end
+               # results is a hash table whose keys are field names and values are hash tables with field values as both key and value, like:
+               # {"genreform"=>{"Diaries"=>"Diaries", "Sketchbooks"=>"Sketchbooks"},  "subject"=>{"Adolescence"=>"Adolescence", "Advertising"=>"Advertising"}}.
+               # The reason to have hash tables within hash tables is for best insertion performance and so that field values aren't duplicated, but
+               # it's a little confusing as a returned result, so convert the inner hash tables to arrays so that the above example would look like"
+               # {"genreform"=>["Diaries", "Sketchbooks"], "subject"=>["Adolescence", "Advertising"]}.
+               results.each do |field_name, field_values|
+                 results[field_name] = field_values.keys
+               end
+             rescue NoMethodError
+               true
+             end
           end
 
           true
