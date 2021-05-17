@@ -77,7 +77,7 @@ module Tufts
         end
 
         def load_ead_xml(_active_fedora_obj)
-          f = file_set.original_file
+          f = object.original_file
           begin
             xml = Nokogiri::XML(f.content)
             return unless xml.xpath('/*').first.name == 'ead'
