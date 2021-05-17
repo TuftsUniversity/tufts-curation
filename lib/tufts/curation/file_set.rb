@@ -1,3 +1,5 @@
+require 'tufts/curation/file_set_indexer'
+
 module Tufts
   module Curation
     ##
