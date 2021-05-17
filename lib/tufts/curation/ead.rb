@@ -13,7 +13,7 @@ module Tufts
       #   The anonymous class that's being used as Ead
       def self.inherited(subclass)
         super
-        subclass.indexer = Tufts::Curation::EadIndexer
+        subclass.indexer = Tufts::Curation::Indexer
       end
     end
   end
