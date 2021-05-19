@@ -57,7 +57,7 @@ module Tufts
 
       def find_indexable_fields(id, results)
         document_fedora = ActiveFedora::Base.find(id)
-        if docuemnt_fedora.file_sets && !docuemnt_fedora.file_sets.empty?
+        if document_fedora.file_sets && !docuemnt_fedora.file_sets.empty?
           begin
              document_ead = Nokogiri::XML(document_fedora.file_sets.first.original_file.content)
              document_ead.remove_namespaces!
