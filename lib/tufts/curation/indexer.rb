@@ -43,6 +43,12 @@ module Tufts
 
           solr_doc['aggregate_date_tesim'] = date_facet + aggregate_date
 
+          if solr_doc["subject_tesim"].nil?
+            solr_doc["subject_tesim"] = object.subject
+          else
+            solr_doc["subject_tesim"] += object.subject
+          end
+
           # used in trove
           create_formatted_fields solr_doc
 
