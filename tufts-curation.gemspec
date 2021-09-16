@@ -26,8 +26,9 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'yard',         '~> 0.9'
   gem.add_development_dependency 'bixby',        '~> 1.0'
   gem.add_development_dependency 'hyrax-spec',   '~> 0.2'
-  gem.add_development_dependency 'rspec',        '~> 3.6'
-  gem.add_development_dependency 'coveralls',    '~> 0.8'
+  gem.add_development_dependency 'rspec',        '~> 3.6'\
+  gem.add_development_dependency 'simplecov'
+  gem.add_development_dependency 'simplecov-lcov', '~> 0.8.0'
   gem.add_development_dependency 'solr_wrapper', '>= 0.3'
   gem.add_development_dependency 'fcrepo_wrapper'
 
