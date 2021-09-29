@@ -458,7 +458,7 @@ module Tufts
 
         # Creates a special collections facet for the DL to use, to remove NNV collections from DL.
         def add_dl_collections_facet(solr_doc)
-          solr_doc['dl_member_of_collections_ssim'] = object.member_of_collections.map(&:first_title)
+          solr_doc['dl_member_of_collections_ssim'] = object.member_of_collections.select { |o| o.visibility != 'restricted' }.map(&:first_title)
           solr_doc
         end
     end
