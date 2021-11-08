@@ -16,6 +16,11 @@ module Tufts
         warn 'Hyrax::FileSetBehavior is unavailable; skipping inclusion ' \
              "in #{subclass}.\n#{e}"
       end
+
+      # Add our custom, downloadable behavior to FileSets
+      property :downloadable, predicate: ::Tufts::Vocab::Tufts.downloadable, multiple: false do |index|
+        index.as :stored_searchable
+      end
     end
   end
 end
