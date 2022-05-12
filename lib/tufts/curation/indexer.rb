@@ -74,7 +74,7 @@ module Tufts
               object.file_sets.each do |fs|
                 if fs.mime_type
                   subtype = fs.mime_type.split('/').last.downcase
-                  complex_file_set_types << fs.mime_type
+                  complex_file_set_types << subtype
                 end
               end
               solr_doc["file_set_complex_types_sim"] = complex_file_set_types
