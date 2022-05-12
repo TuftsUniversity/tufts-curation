@@ -248,9 +248,7 @@ module Tufts
                       legacy_pid = legacy_pid.nil? ? "" : legacy_pid.first
                       legacy_pid.starts_with?("tufts:MS115") ? "Datasets" : "Images"
                     when "Pdf", "Tei"
-                      legacy_pid = object.legacy_pid
-                      legacy_pid = legacy_pid.nil? ? "" : legacy_pid.first
-                      legacy_pid.starts_with?("tufts:UP") ? "Periodicals" : "Text"
+                      "Text"
                     when "GenericObject"
                       "Generic Objects"
                     when "Video"
