@@ -42,7 +42,7 @@ module Tufts
           create_facets solr_doc
 
           solr_doc['aggregate_date_tesim'] = date_facet + aggregate_date
-
+          solr_doc['creator_department_sim'] = object.creator_department
           # used in trove
           create_formatted_fields solr_doc
 
@@ -358,7 +358,7 @@ module Tufts
         end
 
         def index_names_info(solr_doc)
-          [:creator, :contributor, :personal_name, :corporate_name].each do |name_field|
+          [:creator, :contributor, :personal_name, :corporate_name, :creator_department].each do |name_field|
             names = object.send(name_field)
             index_array(solr_doc, 'names', names, :facetable) if !names.nil? && (names.is_a?(Array) || names.is_a?(ActiveTriples::Relation))
             index_single(solr_doc, 'names', names, :facetable) if !names.nil? && names.is_a?(String)
