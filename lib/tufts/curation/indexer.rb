@@ -68,6 +68,22 @@ module Tufts
           end
 
           begin
+            # human_readable_type_sim
+            complex_file_set_types = []
+            if object.file_sets && !object.file_sets.empty?
+              object.file_sets.each do |fs|
+                if fs.mime_type
+                  subtype = fs.mime_type.split('/').last.downcase
+                  complex_file_set_types << fs.mime_type
+                end
+              end
+              solr_doc["file_set_complex_types_sim"] = complex_file_set_types
+            end
+          rescue
+            logger.warn("issue indexing file set complex types created for #{object.id}")
+          end
+
+          begin
             solr_doc["file_set_format_tesim"] = [object.file_sets[0].characterization_proxy.format_label] if object.file_sets && !object.file_sets.empty?
           rescue
             logger.warn("issue indexing file set format for #{object.id}")
