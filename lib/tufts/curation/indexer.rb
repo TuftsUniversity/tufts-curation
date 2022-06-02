@@ -42,7 +42,7 @@ module Tufts
           create_facets solr_doc
 
           solr_doc['aggregate_date_tesim'] = date_facet + aggregate_date
-
+          solr_doc['creator_department_sim'] = object.creator_department
           # used in trove
           create_formatted_fields solr_doc
 
@@ -65,6 +65,22 @@ module Tufts
             end
           rescue
             logger.warn("issue indexing file set date created for #{object.id}")
+          end
+
+          begin
+            # human_readable_type_sim
+            complex_file_set_types = []
+            if object.file_sets && !object.file_sets.empty?
+              object.file_sets.each do |fs|
+                if fs.mime_type
+                  subtype = fs.mime_type.split('/').last.downcase
+                  complex_file_set_types << subtype
+                end
+              end
+              solr_doc["file_set_complex_types_sim"] = complex_file_set_types
+            end
+          rescue
+            logger.warn("issue indexing file set complex types created for #{object.id}")
           end
 
           begin
@@ -232,9 +248,7 @@ module Tufts
                       legacy_pid = legacy_pid.nil? ? "" : legacy_pid.first
                       legacy_pid.starts_with?("tufts:MS115") ? "Datasets" : "Images"
                     when "Pdf", "Tei"
-                      legacy_pid = object.legacy_pid
-                      legacy_pid = legacy_pid.nil? ? "" : legacy_pid.first
-                      legacy_pid.starts_with?("tufts:UP") ? "Periodicals" : "Text"
+                      "Text"
                     when "GenericObject"
                       "Generic Objects"
                     when "Video"
@@ -344,7 +358,7 @@ module Tufts
         end
 
         def index_names_info(solr_doc)
-          [:creator, :contributor, :personal_name, :corporate_name].each do |name_field|
+          [:creator, :contributor, :personal_name, :corporate_name, :creator_department].each do |name_field|
             names = object.send(name_field)
             index_array(solr_doc, 'names', names, :facetable) if !names.nil? && (names.is_a?(Array) || names.is_a?(ActiveTriples::Relation))
             index_single(solr_doc, 'names', names, :facetable) if !names.nil? && names.is_a?(String)
