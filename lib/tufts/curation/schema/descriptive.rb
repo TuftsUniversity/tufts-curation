@@ -144,6 +144,10 @@ module Tufts
           property :oclc, predicate: ::Tufts::Vocab::Tufts.oclc do |index|
             index.as :stored_searchable
           end
+
+          property :isbn, predicate: RDF::Vocab::Bibframe.dissertation do |index|
+            index.as :stored_searchable, :facetable
+          end
         end
       end
     end
