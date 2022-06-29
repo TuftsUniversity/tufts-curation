@@ -16,6 +16,7 @@ module Tufts
       #
       # @see ActiveFedora::Base
       # @see Hyrax::WorkBehavior
+      # rubocop:disable Metrics/ModuleLength:
       module Descriptive
         extend ActiveSupport::Concern
 
