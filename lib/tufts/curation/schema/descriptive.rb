@@ -16,6 +16,7 @@ module Tufts
       #
       # @see ActiveFedora::Base
       # @see Hyrax::WorkBehavior
+      # rubocop:disable Metrics/ModuleLength
       module Descriptive
         extend ActiveSupport::Concern
 
@@ -142,6 +143,10 @@ module Tufts
           end
 
           property :oclc, predicate: ::Tufts::Vocab::Tufts.oclc do |index|
+            index.as :stored_searchable
+          end
+
+          property :dissertation_type, predicate: ::Tufts::Curation::Vocab::Bibframe.dissertation do |index|
             index.as :stored_searchable
           end
         end

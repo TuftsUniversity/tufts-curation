@@ -5,6 +5,7 @@ require 'models/concerns/hyrax/core_metadata'
 require 'models/concerns/hyrax/basic_metadata'
 
 require 'tufts/curation/vocab/tufts'
+require 'tufts/curation/vocab/bibframe'
 require 'tufts/curation/schema/administrative'
 require 'tufts/curation/schema/descriptive'
 require 'tufts/curation/schema/ordered'
