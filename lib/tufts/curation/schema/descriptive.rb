@@ -146,7 +146,7 @@ module Tufts
             index.as :stored_searchable
           end
 
-          property :dissertation_type, predicate: ::Tufts::Curation::Vocab::Bibframe.dissertation do |index|
+          property :dissertation_type, predicate: ::Tufts::Curation::Vocab::Bibframe.dissertation, multiple: false do |index|
             index.as :stored_searchable
           end
         end
