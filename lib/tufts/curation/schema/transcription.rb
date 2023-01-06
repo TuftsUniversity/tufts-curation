@@ -8,7 +8,7 @@ module Tufts
 
         included do
           belongs_to :transcript,
-                     predicate: ::RDF::Vocab::EBUCore.description,
+                     predicate: ::Tufts::Vocab::Tufts.transcription_of,
                      class_name: 'ActiveFedora::Base'
         end
       end
