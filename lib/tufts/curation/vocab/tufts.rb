@@ -40,6 +40,7 @@ module Tufts
         term :geog_name
         term :aspace_cuid
         term :oclc
+        term :transcription_of
       end
     end
   end
