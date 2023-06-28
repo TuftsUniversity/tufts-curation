@@ -3,7 +3,6 @@ module Tufts
     class FileSetIndexer < ActiveFedora::IndexingService
       include Hyrax::IndexesThumbnails
       include Hyrax::IndexesBasicMetadata
-      STORED_LONG = Solrizer::Descriptor.new(:long, :stored)
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/MethodLength
       # rubocop:disable Metrics/BlockLength
