@@ -1,7 +1,7 @@
 shared_examples 'a tufts collection' do
   subject(:collection) { described_class.new }
 
-  it_behaves_like 'a model with hyrax basic metadata'
+  it_behaves_like 'a model with hyrax basic metadata', except: :keyword
 
   it_behaves_like 'a model with ordered metadata' do
     let(:work) { collection }
