@@ -134,13 +134,13 @@ module Tufts
             index.as :stored_searchable
           end
 
-         # property :doi, predicate: RDF::Vocab::Bibframe.Doi, multiple: false do |index|
-         #   index.as :stored_searchable, :facetable
-         # end
+          property :Doi, predicate: RDF::Vocab::Bibframe.Doi, multiple: false do |index|
+            index.as :stored_searchable, :facetable
+          end
 
-         # property :isbn, predicate: RDF::Vocab::Bibframe.Isbn do |index|
-         #   index.as :stored_searchable, :facetable
-         # end
+          property :Isbn, predicate: RDF::Vocab::Bibframe.Isbn do |index|
+            index.as :stored_searchable, :facetable
+          end
 
           property :oclc, predicate: ::Tufts::Vocab::Tufts.oclc do |index|
             index.as :stored_searchable
