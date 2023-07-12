@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'chronic'
+require 'solrizer'
 require 'services/hyrax/thumbnail_path_service'
 require 'services/hyrax/work_thumbnail_path_service'
 require 'services/hyrax/indexes_thumbnails'
