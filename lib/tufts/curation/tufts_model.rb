@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require 'solrizer'
 require 'hyrax/controlled_vocabularies/resource_label_caching'
 require 'hyrax/controlled_vocabularies/location'
 require 'models/concerns/hyrax/core_metadata'
