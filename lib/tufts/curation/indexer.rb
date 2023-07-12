@@ -100,7 +100,7 @@ module Tufts
                            .map(&:id)
 
             unless batches.empty?
-              batch_key = Solrizer.solr_name('batch', :stored_searchable)
+              batch_key = ::Solrizer.solr_name('batch', :stored_searchable)
               solr_doc[batch_key] = batches
             end
           rescue NameError
@@ -214,7 +214,7 @@ module Tufts
                                   valid_date.strftime("%Y")
                                 end
             # puts "valid date string: #{valid_date_string}"
-            Solrizer.insert_field(solr_doc, 'pub_date_sortable', valid_date_string.to_i, :stored_sortable)
+            ::Solrizer.insert_field(solr_doc, 'pub_date_sortable', valid_date_string.to_i, :stored_sortable)
           end
         end
 
@@ -259,7 +259,7 @@ module Tufts
                       # COLLECTION_ERROR_LOG.error "Could not determine Format for : #{pid} with model #{model.inspect}"
                     end
 
-          Solrizer.insert_field(solr_doc, 'object_type', model_s, :facetable) if model_s
+          ::Solrizer.insert_field(solr_doc, 'object_type', model_s, :facetable) if model_s
         end
 
         def create_formatted_fields(solr_doc)
@@ -268,7 +268,7 @@ module Tufts
             # we're storing BCE dates as -0462 using ISO-6801 standard but we want to retrieve them for display formatted for the screen
             date_created = "#{date_created.sub(/^[0\-]*/, '')} BCE" if date_created.start_with? '-'
 
-            Solrizer.insert_field(solr_doc, 'date_created_formatted', date_created.to_s, :stored_searchable) # tesim
+            ::Solrizer.insert_field(solr_doc, 'date_created_formatted', date_created.to_s, :stored_searchable) # tesim
           end
         end
 
@@ -383,15 +383,15 @@ module Tufts
         end
 
         def index_single(solr_doc, field_prefix, name, index_type)
-          Solrizer.insert_field(solr_doc, field_prefix, name, index_type) if name.present? && !name.downcase.include?('unknown')
+          ::Solrizer.insert_field(solr_doc, field_prefix, name, index_type) if name.present? && !name.downcase.include?('unknown')
         end
 
         def index_sort_fields(solr_doc)
           # CREATOR SORT
-          Solrizer.insert_field(solr_doc, 'author', object.creator.first, :sortable) unless object.creator.nil? || object.creator.empty?
+          ::Solrizer.insert_field(solr_doc, 'author', object.creator.first, :sortable) unless object.creator.nil? || object.creator.empty?
 
           # TITLE SORT
-          Solrizer.insert_field(solr_doc, 'title', object.title, :sortable) if object.title
+          ::Solrizer.insert_field(solr_doc, 'title', object.title, :sortable) if object.title
         end
 
         # @return [Array<Integer>] a list of integers representing the years referenced in the dates
