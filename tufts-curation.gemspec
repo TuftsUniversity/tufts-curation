@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'activesupport'
   # gem.add_dependency 'active-fedora', '>= 13.0', '<= 13.99'
   gem.add_dependency 'hyrax', '>= 3.0', '< 3.99'
+  gem.add_dependency 'solrizer'
   gem.add_dependency 'chronic'
   gem.add_development_dependency 'yard',         '~> 0.9'
   gem.add_development_dependency 'bixby',        '~> 1.0'
