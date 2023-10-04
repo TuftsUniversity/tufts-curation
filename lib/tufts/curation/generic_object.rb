@@ -4,6 +4,8 @@ module Tufts
   module Curation
     ##
     # A GenericObject work type
-    class GenericObject < TuftsModel; end
+    class GenericObject < TuftsModel
+      include Tufts::Curation::Schema::Transcription
+    end
   end
 end
