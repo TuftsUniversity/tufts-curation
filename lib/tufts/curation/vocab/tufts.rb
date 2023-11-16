@@ -41,6 +41,8 @@ module Tufts
         term :aspace_cuid
         term :oclc
         term :transcription_of
+        term :call_number
+        term :finding_aid
       end
     end
   end

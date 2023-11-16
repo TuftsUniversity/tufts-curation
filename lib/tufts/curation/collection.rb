@@ -19,7 +19,11 @@ module Tufts
 
       include Hyrax::CoreMetadata
 
-      property :ead, predicate: ::Tufts::Vocab::Tufts.has_description do |index|
+      property :call_number, predicate: ::Tufts::Vocab::Tufts.call_number do |index|
+        index.as :stored_searchable
+      end
+
+      property :finding_aid, predicate: ::Tufts::Vocab::Tufts.finding_aid do |index|
         index.as :stored_searchable
       end
 

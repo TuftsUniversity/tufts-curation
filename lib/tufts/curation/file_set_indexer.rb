@@ -1,14 +1,11 @@
 module Tufts
   module Curation
-    # rubocop:disable Metrics/ClassLength
     class FileSetIndexer < ActiveFedora::IndexingService
       include Hyrax::IndexesThumbnails
       include Hyrax::IndexesBasicMetadata
       STORED_LONG = Solrizer::Descriptor.new(:long, :stored)
       # rubocop:disable Metrics/AbcSize
-      # rubocop:disable Metrics/CyclomaticComplexity
       # rubocop:disable Metrics/MethodLength
-      # rubocop:disable Metrics/PerceivedComplexity
       # rubocop:disable Metrics/BlockLength
       def generate_solr_document
         super.tap do |solr_doc|
@@ -34,7 +31,6 @@ module Tufts
           solr_doc['sample_rate_tesim']       = object.sample_rate
           solr_doc['original_checksum_tesim'] = object.original_checksum
 
-          # ead customizations
           if object.mime_type == "text/html"
             results = {}
 
@@ -47,13 +43,6 @@ module Tufts
               else
                 solr_doc["#{field_name}_tesim"] += field_values
               end
-            end
-            # Only do this after the indexer has the file_set
-            load_ead_xml(object)
-            if @noko.nil?
-              Rails.logger.warn("Couldn't find the Ead XML for #{solr_doc['id']}")
-            else
-              solr_doc['all_text_timv'] = @noko.xpath('//text()').text.gsub(/[^0-9A-Za-z]/, ' ')
             end
           end # end if
         end # end tap
@@ -74,46 +63,6 @@ module Tufts
           elsif object.format_label.present?
             object.format_label
           end
-        end
-
-        def load_ead_xml(_active_fedora_obj)
-          f = object.original_file
-          begin
-            xml = Nokogiri::XML(f.content)
-            return unless xml.xpath('/*').first.name == 'ead'
-          rescue
-            return
-          end
-          xml.remove_namespaces!
-          @noko = xml
-        end
-
-        def find_indexable_fields(results)
-          document_ead = Nokogiri::XML(object.original_file.content)
-
-          return unless document_ead.xpath('/*').first.name == 'ead'
-
-          document_ead.remove_namespaces!
-
-          archdescs = document_ead.xpath('//ead/archdesc')
-
-          return false if archdescs.empty?
-
-          archdescs.each do |archdesc|
-            find_controlaccess(archdesc, results)
-            find_dsc(archdesc, results)
-          end
-
-          # results is a hash table whose keys are field names and values are hash tables with field values as both key and value, like:
-          # {"genreform"=>{"Diaries"=>"Diaries", "Sketchbooks"=>"Sketchbooks"},  "subject"=>{"Adolescence"=>"Adolescence", "Advertising"=>"Advertising"}}.
-          # The reason to have hash tables within hash tables is for best insertion performance and so that field values aren't duplicated, but
-          # it's a little confusing as a returned result, so convert the inner hash tables to arrays so that the above example would look like"
-          # {"genreform"=>["Diaries", "Sketchbooks"], "subject"=>["Adolescence", "Advertising"]}.
-          results.each do |field_name, field_values|
-            results[field_name] = field_values.keys
-          end
-
-          true
         end
 
         def find_controlaccess(node, results)

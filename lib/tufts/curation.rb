@@ -15,8 +15,6 @@ require 'tufts/curation/collection'
 require 'tufts/curation/file_set'
 
 require 'tufts/curation/audio'
-require 'tufts/curation/ead'
-require 'tufts/curation/ead_indexer'
 require 'tufts/curation/tei_indexer'
 require 'tufts/curation/generic_object'
 require 'tufts/curation/image'
@@ -32,7 +30,6 @@ module Tufts
   # Shared models and curation tools for Tufts Hyrax repositories.
   module Curation
     MODELS = { audio:          Tufts::Curation::Audio,
-               ead:            Tufts::Curation::Ead,
                generic_object: Tufts::Curation::GenericObject,
                image:          Tufts::Curation::Image,
                pdf:            Tufts::Curation::Pdf,

@@ -7,10 +7,14 @@ shared_examples 'a tufts collection' do
     let(:work) { collection }
   end
 
-  it 'has ead' do
+  it 'has call_number' do
     expect(collection)
-      .to have_editable_property(:ead)
-      .with_predicate(Tufts::Vocab::Tufts.has_description)
+      .to have_editable_property(:call_number)
+  end
+
+  it 'has finding_aid' do
+    expect(collection)
+      .to have_editable_property(:finding_aid)
   end
 
   describe 'ordered fields' do

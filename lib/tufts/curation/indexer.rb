@@ -239,8 +239,6 @@ module Tufts
           model_s = case model
                     when "VotingRecord"
                       "Datasets"
-                    when "Ead"
-                      "Collection Guides"
                     when "Audio"
                       "Audio"
                     when "Image"
@@ -350,7 +348,6 @@ module Tufts
 
         # MISCNOTES:
         # There will be no facet for RCR. There will be no way to reach RCR via browse.
-        # 3. There will be a facet for "collection guides", namely EAD, namely the landing page view we discussed on Friday.
         def create_facets(solr_doc)
           index_names_info(solr_doc)
           index_subject_info(solr_doc)

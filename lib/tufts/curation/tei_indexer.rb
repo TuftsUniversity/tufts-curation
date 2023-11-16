@@ -12,7 +12,7 @@ module Tufts
             unless object.file_sets.nil?
               load_tei_xml(object)
               if @noko.nil?
-                Rails.logger.warn("Couldn't find the Ead XML for #{solr_doc['id']}")
+                Rails.logger.warn("Couldn't find the TEI XML for #{solr_doc['id']}")
               else
                 solr_doc['all_text_timv'] = @noko.xpath('//text()').text.gsub(/[^0-9A-Za-z]/, ' ')
               end
