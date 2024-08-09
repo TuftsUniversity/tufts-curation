@@ -36,10 +36,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ['2.6']
+        ruby-version: ['3.2.2']
         experimental: [false]
         include:
-          - ruby-version: 2.7
+          - ruby-version: 3.2.2
             experimental: true
 
     steps:
@@ -71,6 +71,9 @@ jobs:
     - name: Compile assets
       run: |
         bundle exec rails assets:precompile &> /dev/null
+    - name: Rubbocop
+      run: |
+        bundle exec rubocop
     - name: Run tests
       run: xvfb-run -a bundle exec rake ci
       env:
