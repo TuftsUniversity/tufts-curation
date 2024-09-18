@@ -149,6 +149,10 @@ module Tufts
           property :dissertation_type, predicate: ::Tufts::Curation::Vocab::Bibframe.dissertation, multiple: false do |index|
             index.as :stored_searchable
           end
+
+          property :advisor predicate RDF::Vocab::DC.contributor do |index|
+            index.as :stored_searchable
+          end
         end
       end
     end
