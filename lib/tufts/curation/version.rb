@@ -2,6 +2,6 @@
 
 module Tufts
   module Curation
-    VERSION = '0.1.0'.freeze
+    VERSION = '1.3.3'.freeze
   end
 end
