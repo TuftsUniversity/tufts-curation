@@ -150,7 +150,7 @@ module Tufts
             index.as :stored_searchable
           end
 
-          property :advisor, predicate RDF::Vocab::DC.contributor do |index|
+          property :advisor, predicate: RDF::Vocab::DC.contributor do |index|
             index.as :stored_searchable
           end
         end
