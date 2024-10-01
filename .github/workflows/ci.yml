@@ -36,11 +36,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ['2.6']
+        ruby-version: ['3.2']
         experimental: [false]
-        include:
-          - ruby-version: 2.7
-            experimental: true
 
     steps:
     - name: Install OS packages
@@ -54,12 +51,10 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby-version }}
-        bundler: "2.1.4"
+        bundler: "2.5.9"
         bundler-cache: false # runs 'bundle install' and caches installed gems automatically
     - name: Update rubygems
       run: |
-        gem update --system 3.3.27
-        gem install bundler:2.1.4
     - name: bundle install
       run: |
         bundle install
