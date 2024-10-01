@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
                       Dir.glob('lib/**/*.rb')
   gem.require_paths = %w[lib]
 
-  gem.required_ruby_version = '>= 2.3.4', '< 3.0'
+  gem.required_ruby_version = '>= 2.3.4', '< 3.3'
 
   gem.add_dependency 'activerecord'
   gem.add_dependency 'activesupport'
