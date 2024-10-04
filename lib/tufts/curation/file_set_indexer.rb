@@ -34,8 +34,6 @@ module Tufts
           if object.mime_type == "text/html"
             results = {}
 
-            find_indexable_fields(results)
-            # puts "#{results}"
             results.each do |field_name, field_values|
               # puts("  #{field_name}")
               if solr_doc["#{field_name}_tesim"].nil?
