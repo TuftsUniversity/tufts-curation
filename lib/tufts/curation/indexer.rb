@@ -37,6 +37,10 @@ module Tufts
 
       def generate_solr_document
         super.tap do |solr_doc|
+          # record the indexing app name so we know who indexed this object
+          identifier = Tufts::Curation::IndexerIdentifier.new
+          solr_doc['indexing_app_tesim'] = identifier.identify
+
           solr_doc['pub_date_facet_isim'] = date_facet
           index_sort_fields solr_doc
           create_facets solr_doc
