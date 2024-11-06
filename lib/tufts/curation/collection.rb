@@ -10,14 +10,14 @@ module Tufts
       # If it is unavailable, we skip loading the complex behavior and settle for having
       # `Hyrax::CoreMetadata` and `Hyrax::BasicMetadata` in place.
       def self.inherited(subclass)
-        subclass.include 'Hyrax::CollectionBehavior'.constantize
+        subclass.include '::Hyrax::CollectionBehavior'.constantize
         subclass.indexer = Hyrax::CollectionWithBasicMetadataIndexer
       rescue NameError => e
         warn 'Hyrax::CollectionBehavior is unavailable; skipping inclusion ' \
              "in #{subclass}.\n#{e}"
       end
 
-      include Hyrax::CoreMetadata
+      include Hyrax::BasicMetadata
 
       property :call_number, predicate: ::Tufts::Vocab::Tufts.call_number do |index|
         index.as :stored_searchable
