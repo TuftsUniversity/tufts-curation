@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # No Change
 hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-c42434073491') }
+hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-2') } if hyrax_path.nil?
 hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-3') } if hyrax_path.nil?
 hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax') } if hyrax_path.nil?
 $LOAD_PATH.unshift(Pathname.new(hyrax_path).join('..', 'app').to_s)
