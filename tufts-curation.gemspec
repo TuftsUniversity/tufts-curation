@@ -23,6 +23,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'active-fedora', '~> 13.1', '>= 13.1.2'
   gem.add_dependency 'hyrax',         '>= 3.0.0', '< 4.0'
   gem.add_dependency 'chronic'
+  gem.add_dependency 'logger'
   gem.add_development_dependency 'yard',         '~> 0.9'
   gem.add_development_dependency 'bixby', '~> 5.0', '>= 5.0.2' # bixby 5 briefly dropped Ruby 2.5
   gem.add_development_dependency 'hyrax-spec',   '~> 0.2'
