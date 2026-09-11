@@ -391,7 +391,7 @@ module Tufts
 
       def index_sort_fields(solr_doc)
         # CREATOR SORT
-        Solrizer.insert_field(solr_doc, 'author', object.creator.first, :sortable) unless object.creator.nil? || object.creator.empty?
+        Solrizer.insert_field(solr_doc, 'author', object.creator.first, :sortable) unless object.creator.blank?
 
         # TITLE SORT
         Solrizer.insert_field(solr_doc, 'title', object.title, :sortable) if object.title
@@ -417,10 +417,10 @@ module Tufts
 
         if date.blank? || date[/n\.d/]
           []
-        elsif /^\d{4}$/ =~ date
+        elsif date.match(/^\d{4}$/)
           # Date.iso8601 doesn't support YYYY dates
           [date.to_i]
-        elsif /^\d{4}-\d{4}$/ =~ date
+        elsif date.match(/^\d{4}-\d{4}$/)
           # date range in YYYY-YYYY format
           earliest, latest = date.split('-').flat_map(&:to_i)
           begin
@@ -428,7 +428,7 @@ module Tufts
           rescue RangeError
             (earliest).to_a
           end
-        elsif (/^Circa \d{4} – \d{4}$/ =~ date) || (/^Circa \d{4}–\d{4}$/ =~ date) || (/^circa \d{4} – \d{4}$/ =~ date) || (/^circa \d{4}–\d{4}$/ =~ date)
+        elsif date.match(/^Circa \d{4} – \d{4}$/) || date.match(/^Circa \d{4}–\d{4}$/) || date.match(/^circa \d{4} – \d{4}$/) || date.match(/^circa \d{4}–\d{4}$/)
           date.gsub!("Circa", "")
           date.gsub!("circa", "")
           date.delete!(" ")
