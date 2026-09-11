@@ -32,14 +32,16 @@ module Tufts
   ##
   # Shared models and curation tools for Tufts Hyrax repositories.
   module Curation
-    MODELS = { audio:          Tufts::Curation::Audio,
-               generic_object: Tufts::Curation::GenericObject,
-               image:          Tufts::Curation::Image,
-               pdf:            Tufts::Curation::Pdf,
-               rcr:            Tufts::Curation::Rcr,
-               tei:            Tufts::Curation::Tei,
-               video:          Tufts::Curation::Video,
-               voting_record:  Tufts::Curation::VotingRecord }.freeze
+    MODELS = { 
+                audio:          Tufts::Curation::Audio,
+                generic_object: Tufts::Curation::GenericObject,
+                image:          Tufts::Curation::Image,
+                pdf:            Tufts::Curation::Pdf,
+                rcr:            Tufts::Curation::Rcr,
+                tei:            Tufts::Curation::Tei,
+                video:          Tufts::Curation::Video,
+                voting_record:  Tufts::Curation::VotingRecord 
+              }.freeze
 
     ##
     # Registers curation_concerns with a hyrax application using the passed

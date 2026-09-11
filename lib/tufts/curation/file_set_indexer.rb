@@ -50,91 +50,91 @@ module Tufts
 
       private
 
-        def digest_from_content
-          return unless object.original_file
-          object.original_file.digest.first.to_s
+      def digest_from_content
+        return unless object.original_file
+        object.original_file.digest.first.to_s
+      end
+
+      def file_format
+        if object.mime_type.present? && object.format_label.present?
+          "#{object.mime_type.split('/').last} (#{object.format_label.join(', ')})"
+        elsif object.mime_type.present?
+          object.mime_type.split('/').last
+        elsif object.format_label.present?
+          object.format_label
+        end
+      end
+
+      def find_controlaccess(node, results)
+        controlaccess = node.xpath('./controlaccess')
+
+        return false if controlaccess.empty?
+
+        # puts('  ' + node.name + (node.name == 'archdesc' ? '' : (' ' + node['level'] + ' ' + node['id'])))
+        find_tag(controlaccess, 'persname', results)
+        find_tag(controlaccess, 'corpname', results)
+        find_tag(controlaccess, 'famname', results)
+        find_tag(controlaccess, 'geogname', results)
+        find_tag(controlaccess, 'genreform', results)
+        find_tag(controlaccess, 'subject', results)
+        # find_tag(controlaccess, 'title', results)
+
+        true
+      end
+
+      def find_dsc(node, results)
+        dsc = node.xpath('./dsc')
+
+        return false if dsc.empty?
+
+        unless find_series(dsc, results)  # ASpace series (c)
+          find_series(dsc, results, 1)    # non-ASpace series (c01, c02...)
         end
 
-        def file_format
-          if object.mime_type.present? && object.format_label.present?
-            "#{object.mime_type.split('/').last} (#{object.format_label.join(', ')})"
-          elsif object.mime_type.present?
-            object.mime_type.split('/').last
-          elsif object.format_label.present?
-            object.format_label
-          end
+        true
+      end
+
+      def find_series(node, results, level = 0)
+        if level.zero?
+          level_string = ''
+          next_level = 0
+        else
+          level_string = format('%02d', level)
+          next_level = level + 1
         end
 
-        def find_controlaccess(node, results)
-          controlaccess = node.xpath('./controlaccess')
+        serieses = node.xpath('./c' + level_string)
 
-          return false if controlaccess.empty?
+        return false if serieses.empty?
 
-          # puts('  ' + node.name + (node.name == 'archdesc' ? '' : (' ' + node['level'] + ' ' + node['id'])))
-          find_tag(controlaccess, 'persname', results)
-          find_tag(controlaccess, 'corpname', results)
-          find_tag(controlaccess, 'famname', results)
-          find_tag(controlaccess, 'geogname', results)
-          find_tag(controlaccess, 'genreform', results)
-          find_tag(controlaccess, 'subject', results)
-          # find_tag(controlaccess, 'title', results)
-
-          true
+        serieses.each do |series|
+          find_controlaccess(series, results)
+          find_series(series, results, next_level)
         end
 
-        def find_dsc(node, results)
-          dsc = node.xpath('./dsc')
+        true
+      end
 
-          return false if dsc.empty?
+      def find_tag(node, tag, results)
+        subnodes = node.xpath('./' + tag)
 
-          unless find_series(dsc, results)  # ASpace series (c)
-            find_series(dsc, results, 1)    # non-ASpace series (c01, c02...)
-          end
+        return false if subnodes.empty?
 
-          true
+        # puts('    ' + tag)
+        tag_hash = results[tag]
+
+        if tag_hash.nil?
+          tag_hash = {}
+          results[tag] = tag_hash
         end
 
-        def find_series(node, results, level = 0)
-          if level.zero?
-            level_string = ''
-            next_level = 0
-          else
-            level_string = format('%02d', level)
-            next_level = level + 1
-          end
-
-          serieses = node.xpath('./c' + level_string)
-
-          return false if serieses.empty?
-
-          serieses.each do |series|
-            find_controlaccess(series, results)
-            find_series(series, results, next_level)
-          end
-
-          true
+        subnodes.each do |subnode|
+          # puts('      ' + subnode.text)
+          tag_hash[subnode.text] = subnode.text
         end
 
-        def find_tag(node, tag, results)
-          subnodes = node.xpath('./' + tag)
-
-          return false if subnodes.empty?
-
-          # puts('    ' + tag)
-          tag_hash = results[tag]
-
-          if tag_hash.nil?
-            tag_hash = {}
-            results[tag] = tag_hash
-          end
-
-          subnodes.each do |subnode|
-            # puts('      ' + subnode.text)
-            tag_hash[subnode.text] = subnode.text
-          end
-
-          true
-        end
+        true
+      end
     end
   end
 end
