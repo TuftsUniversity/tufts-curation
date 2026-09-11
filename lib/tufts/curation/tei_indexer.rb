@@ -29,19 +29,19 @@ module Tufts
 
       private
 
-        def load_tei_xml(active_fedora_obj)
-          active_fedora_obj.file_sets.each do |file_set|
-            f = file_set.original_file
-            begin
-              xml = Nokogiri::XML(f.content)
-              next unless xml.xpath('/*').first.name.start_with? "TEI"
-            rescue
-              next
-            end
-            xml.remove_namespaces!
-            @noko = xml
-          end # end each file set
-        end
+      def load_tei_xml(active_fedora_obj)
+        active_fedora_obj.file_sets.each do |file_set|
+          f = file_set.original_file
+          begin
+            xml = Nokogiri::XML(f.content)
+            next unless xml.xpath('/*').first.name.start_with? "TEI"
+          rescue
+            next
+          end
+          xml.remove_namespaces!
+          @noko = xml
+        end # end each file set
+      end
       # end private
     end # End class TEIIndexer
   end
