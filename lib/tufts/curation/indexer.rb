@@ -140,31 +140,31 @@ module Tufts
 
           date = date.split[1..10].join(' ') if !date.nil? && !date[/^c/].nil?
 
-          if (/^Circa \d{4} – \d{4}$/ =~ date) || (/^Circa \d{4}–\d{4}$/ =~ date)
+          if date.match(/^Circa \d{4} – \d{4}$/ ) || date.match(/^Circa \d{4}–\d{4}$/)
             _earliest, latest = date.split('–').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
           end
 
-          if (/^circa \d{4} – \d{4}$/ =~ date) || (/^circa \d{4}–\d{4}$/ =~ date)
+          if date.match(/^circa \d{4} – \d{4}$/) || date.match(/^circa \d{4}–\d{4}$/)
             _earliest, latest = date.split('–').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
           end
 
-          if (/^Circa \d{4} -- \d{4}$/ =~ date) || (/^circa \d{4}--\d{4}$/ =~ date)
+          if date.macth(/^Circa \d{4} -- \d{4}$/) || date.match(/^circa \d{4}--\d{4}$/)
             _earliest, latest = date.split('–').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
           end
 
-          if /^\d{4} -- \d{4}$/ =~ date
+          if date.match(/^\d{4} -- \d{4}$/)
             _earliest, latest = date.split('--').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
           end
 
-          if /^\d{4} - \d{4}$/ =~ date
+          if date.match(/^\d{4} - \d{4}$/)
             _earliest, latest = date.split('-').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
@@ -294,13 +294,13 @@ module Tufts
       end
 
       def format_circa(date, allow_multiple = false)
-        if (/^Circa \d{4} – \d{4}$/ =~ date) || (/^Circa \d{4}–\d{4}$/ =~ date) || (/^circa \d{4} – \d{4}$/ =~ date) || (/^circa \d{4}–\d{4}$/ =~ date)
+        if date.match(/^Circa \d{4} – \d{4}$/) || date.match(/^Circa \d{4}–\d{4}$/) || date.format(/^circa \d{4} – \d{4}$/) || date.match(/^circa \d{4}–\d{4}$/)
           earliest, latest = date.split('–').flat_map(&:to_s)
           date = latest
           date = date.delete(" ")
         end
 
-        if (/^Circa \d{4} -- \d{4}$/ =~ date) || (/^circa \d{4}--\d{4}$/ =~ date) || (/^circa \d{4} -- \d{4}$/ =~ date)
+        if date.match(/^Circa \d{4} -- \d{4}$/) || date.match(/^circa \d{4}--\d{4}$/) || (date.match(/^circa \d{4} -- \d{4}$/)
           earliest, latest = date.split('--').flat_map(&:to_s)
           date = latest
           date = date.delete(" ")
@@ -443,7 +443,7 @@ module Tufts
             # return
             []
           end
-        elsif (/^Circa \d{4} -- \d{4}$/ =~ date) || (/^circa \d{4}--\d{4}$/ =~ date) || (/^circa \d{4} -- \d{4}$/ =~ date)
+        elsif date.match(/^Circa \d{4} -- \d{4}$/) || date.match(/^circa \d{4}--\d{4}$/) || date.match(/^circa \d{4} -- \d{4}$/)
           date.gsub!("Circa", "")
           date.gsub!("circa", "")
           date.delete!(" ")
