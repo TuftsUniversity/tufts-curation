@@ -34,7 +34,7 @@ namespace :tufts do
   namespace :curation do
     desc 'Run specs with Fedora & Solr servers'
     # rubocop:disable Rails/RakeEnvironment
-    task :spec do
+    task spec: :environment do
       with_test_server do
         Rake::Task['spec'].invoke
       end
