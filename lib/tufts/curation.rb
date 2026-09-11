@@ -40,7 +40,7 @@ module Tufts
       rcr: Tufts::Curation::Rcr,
       tei: Tufts::Curation::Tei,
       video: Tufts::Curation::Video,
-      voting_record: Tufts::Curation::VotingRecord 
+      voting_record: Tufts::Curation::VotingRecord
     }.freeze
 
     ##
@@ -70,7 +70,7 @@ module Tufts
 
         yield class_name.constantize if block_given?
 
-        configuration.register_curation_concern(model_name) unless configuration.nil?
+        configuration&.register_curation_concern(model_name)
       end
 
       Object.const_set('FileSet', Class.new(Tufts::Curation::FileSet))

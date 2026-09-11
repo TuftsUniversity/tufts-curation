@@ -6,7 +6,7 @@ module Tufts
       # The Nokogiri document
       attr_accessor :noko
       def generate_solr_document
-        super.tap do |solr_doc|      
+        super.tap do |solr_doc|
           # Only do this after the indexer has the file_set
           unless object.file_sets.nil?
             load_tei_xml(object)
