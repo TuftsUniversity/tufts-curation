@@ -56,7 +56,7 @@ module Tufts
           solr_doc = add_dl_collections_facet(solr_doc)
           begin
 
-            if object.file_sets && !object.file_sets.empty?
+            if object.file_sets.present?
               solr_doc["file_set_date_created_tesim"] = object.file_sets[0].characterization_proxy.date_created.first.to_s
               unless object.file_sets[0].characterization_proxy.date_created.empty?
                 date_string = object.file_sets[0].characterization_proxy.date_created.first.to_s
@@ -74,7 +74,7 @@ module Tufts
           begin
             # human_readable_type_sim
             complex_file_set_types = []
-            if object.file_sets && !object.file_sets.empty?
+            if object.file_sets.present?
               object.file_sets.each do |fs|
                 if fs.mime_type
                   subtype = fs.mime_type.split('/').last.downcase
@@ -88,7 +88,7 @@ module Tufts
           end
 
           begin
-            solr_doc["file_set_format_tesim"] = [object.file_sets[0].characterization_proxy.format_label] if object.file_sets && !object.file_sets.empty?
+            solr_doc["file_set_format_tesim"] = [object.file_sets[0].characterization_proxy.format_label] if object.file_sets.present?
           rescue
             logger.warn("issue indexing file set format for #{object.id}")
           end
@@ -332,7 +332,7 @@ module Tufts
         date_created = []
 
         begin
-          if object.file_sets && !object.file_sets.empty?
+          if object.file_sets.present?
             #    date_created += [object.file_sets[0].characterization_proxy.date_created.first.to_s]
             unless object.file_sets[0].characterization_proxy.date_created.empty?
               date_string = object.file_sets[0].characterization_proxy.date_created.first.to_s
@@ -436,10 +436,12 @@ module Tufts
             (earliest..latest).to_a
           rescue TypeError
             logger.error "TypeError: can't iterate from NilClass for #{date}"
-            return []
+            # return
+            []
           rescue RangeError
             logger.error "Range Error for #{date}"
-            return []
+            # return
+            []
           end
         elsif (/^Circa \d{4} -- \d{4}$/ =~ date) || (/^circa \d{4}--\d{4}$/ =~ date) || (/^circa \d{4} -- \d{4}$/ =~ date)
           date.gsub!("Circa", "")
@@ -450,10 +452,12 @@ module Tufts
             (earliest..latest).to_a
           rescue TypeError
             logger.error "TypeError: can't iterate from NilClass for #{date}"
-            return []
+            # return
+            []
           rescue RangeError
             logger.error "Range Error for #{date}"
-            return []
+            # return
+            []
           end
         else
           [Date.iso8601(date).year]
