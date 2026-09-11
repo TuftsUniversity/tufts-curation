@@ -24,6 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'hyrax',         '>= 3.0.0', '< 4.0'
   gem.add_dependency 'chronic'
   gem.add_dependency 'logger', '~> 1.6'
+  gem.add_dependency 'solrizer'
   gem.add_development_dependency 'yard',         '~> 0.9'
   gem.add_development_dependency 'bixby', '~> 5.0', '>= 5.0.2' # bixby 5 briefly dropped Ruby 2.5
   gem.add_development_dependency 'hyrax-spec',   '~> 0.2'
