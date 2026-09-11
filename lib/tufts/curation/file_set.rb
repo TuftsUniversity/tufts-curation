@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tufts/curation/file_set_indexer'
 
 module Tufts

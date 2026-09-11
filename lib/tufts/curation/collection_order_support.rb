@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # @file
 # Contains all the code that connects Collections to their CollectionOrders
 
