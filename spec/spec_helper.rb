@@ -20,7 +20,7 @@ require 'pry' unless ENV['CI']
 ENV['environment'] ||= 'test'
 
 # IS this a fix?
-require 'services/hyrax'
+require 'hyrax'
 
 require 'bundler/setup'
 require 'tufts/curation'
