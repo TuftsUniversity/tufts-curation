@@ -25,6 +25,9 @@ require 'tufts/curation/spec/shared_examples'
 require 'hyrax/spec/shared_examples'
 require 'hyrax/spec/matchers'
 
+# IS this a fix?
+require 'services/hyrax'
+
 Dir['./spec/support/**/*.rb'].each { |f| require f }
 
 RSpec.configure do |config|
