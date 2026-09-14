@@ -140,7 +140,7 @@ module Tufts
 
           date = date.split[1..10].join(' ') if !date.nil? && !date[/^c/].nil?
 
-          if date.match(/^Circa \d{4} – \d{4}$/ ) || date.match(/^Circa \d{4}–\d{4}$/)
+          if date.match(/^Circa \d{4} – \d{4}$/) || date.match(/^Circa \d{4}–\d{4}$/)
             _earliest, latest = date.split('–').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
@@ -152,19 +152,19 @@ module Tufts
             date = date.delete(" ")
           end
 
-          if date.macth(/^Circa \d{4} -- \d{4}$/) || date.match(/^circa \d{4}--\d{4}$/)
+          if date.match(/^Circa \d{4} -- \d{4}$/) || date.match(/^circa \d{4}--\d{4}$/)
             _earliest, latest = date.split('–').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
           end
 
-          if date.match(/^\d{4} -- \d{4}$/)
+          if date.match?(/^\d{4} -- \d{4}$/)
             _earliest, latest = date.split('--').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
           end
 
-          if date.match(/^\d{4} - \d{4}$/)
+          if date.match?(/^\d{4} - \d{4}$/)
             _earliest, latest = date.split('-').flat_map(&:to_s)
             date = latest
             date = date.delete(" ")
@@ -391,7 +391,7 @@ module Tufts
 
       def index_sort_fields(solr_doc)
         # CREATOR SORT
-        Solrizer.insert_field(solr_doc, 'author', object.creator.first, :sortable) unless object.creator.blank?
+        Solrizer.insert_field(solr_doc, 'author', object.creator.first, :sortable) unless object.creator.present?
 
         # TITLE SORT
         Solrizer.insert_field(solr_doc, 'title', object.title, :sortable) if object.title
@@ -417,10 +417,10 @@ module Tufts
 
         if date.blank? || date[/n\.d/]
           []
-        elsif date.match(/^\d{4}$/)
+        elsif date.match?(/^\d{4}$/)
           # Date.iso8601 doesn't support YYYY dates
           [date.to_i]
-        elsif date.match(/^\d{4}-\d{4}$/)
+        elsif date.match?(/^\d{4}-\d{4}$/)
           # date range in YYYY-YYYY format
           earliest, latest = date.split('-').flat_map(&:to_i)
           begin
