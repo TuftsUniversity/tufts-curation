@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tufts/curation/file_set_indexer'
 
 module Tufts
@@ -9,6 +11,7 @@ module Tufts
       # Use `Hyrax::FileSet` in subclasses if it is available. Hyrax
       # applications will have this loaded.
       def self.inherited(subclass)
+        super
         subclass.include 'Hyrax::FileSetBehavior'.constantize
         subclass.indexer = Tufts::Curation::FileSetIndexer
 

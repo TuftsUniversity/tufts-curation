@@ -1,8 +1,12 @@
 # frozen_string_literal: true
+# No Change
 hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-c42434073491') }
 hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-2') } if hyrax_path.nil?
+hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-3') } if hyrax_path.nil?
+hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax') } if hyrax_path.nil?
 $LOAD_PATH.unshift(Pathname.new(hyrax_path).join('..', 'app').to_s)
 
+require 'logger'
 require 'active_fedora'
 require 'solrizer'
 require 'rdf/vocab'
@@ -29,14 +33,16 @@ module Tufts
   ##
   # Shared models and curation tools for Tufts Hyrax repositories.
   module Curation
-    MODELS = { audio:          Tufts::Curation::Audio,
-               generic_object: Tufts::Curation::GenericObject,
-               image:          Tufts::Curation::Image,
-               pdf:            Tufts::Curation::Pdf,
-               rcr:            Tufts::Curation::Rcr,
-               tei:            Tufts::Curation::Tei,
-               video:          Tufts::Curation::Video,
-               voting_record:  Tufts::Curation::VotingRecord }.freeze
+    MODELS = {
+      audio: Tufts::Curation::Audio,
+      generic_object: Tufts::Curation::GenericObject,
+      image: Tufts::Curation::Image,
+      pdf: Tufts::Curation::Pdf,
+      rcr: Tufts::Curation::Rcr,
+      tei: Tufts::Curation::Tei,
+      video: Tufts::Curation::Video,
+      voting_record: Tufts::Curation::VotingRecord
+    }.freeze
 
     ##
     # Registers curation_concerns with a hyrax application using the passed
@@ -65,7 +71,7 @@ module Tufts
 
         yield class_name.constantize if block_given?
 
-        configuration.register_curation_concern(model_name) unless configuration.nil?
+        configuration&.register_curation_concern(model_name)
       end
 
       Object.const_set('FileSet', Class.new(Tufts::Curation::FileSet))

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples 'a model with a transcription' do
   let(:other_work) { ActiveFedora::Base.new }
 

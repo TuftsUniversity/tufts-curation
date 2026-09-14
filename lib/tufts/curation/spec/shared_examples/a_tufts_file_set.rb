@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples 'a tufts file set' do
   subject(:file_set) { described_class.new }
 

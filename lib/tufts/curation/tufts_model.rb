@@ -24,6 +24,7 @@ module Tufts
       # If it is unavailable, we skip loading the complex behavior and settle for having
       # `Hyrax::CoreMetadata` and `Hyrax::BasicMetadata` in place.
       def self.inherited(subclass)
+        super
         subclass.include 'Hyrax::WorkBehavior'.constantize
         subclass.indexer = Tufts::Curation::Indexer
       rescue NameError => e
