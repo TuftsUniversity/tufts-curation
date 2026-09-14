@@ -19,14 +19,14 @@ end
 require 'pry' unless ENV['CI']
 ENV['environment'] ||= 'test'
 
+# IS this a fix?
+require 'services/hyrax'
+
 require 'bundler/setup'
 require 'tufts/curation'
 require 'tufts/curation/spec/shared_examples'
 require 'hyrax/spec/shared_examples'
 require 'hyrax/spec/matchers'
-
-# IS this a fix?
-require 'services/hyrax'
 
 Dir['./spec/support/**/*.rb'].each { |f| require f }
 
