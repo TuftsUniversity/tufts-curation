@@ -391,7 +391,7 @@ module Tufts
 
       def index_sort_fields(solr_doc)
         # CREATOR SORT
-        Solrizer.insert_field(solr_doc, 'author', object.creator.first, :sortable) unless object.creator.present?
+        Solrizer.insert_field(solr_doc, 'author', object.creator.first, :sortable) if object.creator.present?
 
         # TITLE SORT
         Solrizer.insert_field(solr_doc, 'title', object.title, :sortable) if object.title
