@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'chronic'
-require 'services/hyrax/thumbnail_path_service'
+# Temp remove this, probs tbd find new place to require this
+# require 'services/hyrax/thumbnail_path_service'
 require 'services/hyrax/work_thumbnail_path_service'
 require 'services/hyrax/indexes_thumbnails'
 require 'indexers/hyrax/indexes_workflow'
