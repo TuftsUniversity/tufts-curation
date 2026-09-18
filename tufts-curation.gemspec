@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'activerecord', '>= 6.0', '< 7'
   gem.add_dependency 'activesupport', '>= 6.0', '< 7'
   gem.add_dependency 'active-fedora', '~> 13.1', '>= 13.1.2'
-  gem.add_dependency 'hyrax',         '>= 3.0.0', '< 3.4'
+  gem.add_dependency 'hyrax',         '>= 3.0.0', '< 3.6'
   gem.add_dependency 'chronic'
   gem.add_dependency 'logger', '~> 1.6'
   gem.add_dependency 'solrizer'
@@ -29,7 +29,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'bixby', '~> 5.0', '>= 5.0.2' # bixby 5 briefly dropped Ruby 2.5
   gem.add_development_dependency 'hyrax-spec',   '~> 0.2'
   gem.add_development_dependency 'rspec',        '~> 3.6'
-  gem.add_development_dependency 'simplecov', '< 1.0'
+  gem.add_development_dependency 'simplecov', '< 1.1'
   gem.add_development_dependency 'simplecov-lcov', '~> 0.8.0'
   gem.add_development_dependency 'solr_wrapper', '>= 0.3'
   gem.add_development_dependency 'fcrepo_wrapper'
