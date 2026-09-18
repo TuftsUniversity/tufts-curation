@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'activerecord', '>= 6.0', '< 7'
   gem.add_dependency 'activesupport', '>= 6.0', '< 7'
   gem.add_dependency 'active-fedora', '~> 13.1', '>= 13.1.2'
-  gem.add_dependency 'hyrax',         '>= 3.0.0', '< 3.6'
+  gem.add_dependency 'hyrax',         '>= 3.0.0', '< 3.7'
   gem.add_dependency 'chronic'
   gem.add_dependency 'logger', '~> 1.6'
   gem.add_dependency 'solrizer'
