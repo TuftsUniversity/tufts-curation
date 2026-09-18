@@ -8,8 +8,7 @@ Metrics/AbcSize:
   Exclude:
     - 'lib/tufts/curation/indexer.rb'
 Rails/Output:
-  Exclude:
-    - '*'
+  Enabled: false
 Style/GuardClause:
   Exclude:
     - 'lib/tufts/curation/indexer.rb'
