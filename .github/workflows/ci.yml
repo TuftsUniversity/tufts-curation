@@ -75,6 +75,7 @@ jobs:
     #     bundle exec rails assets:precompile --trace # &> /dev/null
     - name: Run tests
       run: |
+        ls /opt/hostedtoolcache/Ruby/2.7.8/x64/lib/ruby/gems/2.7.0/gems/
         bundle show hyrax
         xvfb-run -a bundle exec rake ci
       env:
