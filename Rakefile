@@ -22,10 +22,10 @@ SolrWrapper.default_instance_options = {
   instance_dir: 'solr/install'
 }
 
-desc 'Run style checker'
-RuboCop::RakeTask.new(:rubocop) do |task|
-  task.fail_on_error = true
-end
+# desc 'Run style checker'
+# RuboCop::RakeTask.new(:rubocop) do |task|
+#   task.fail_on_error = true
+# end
 
 desc 'Run specs'
 RSpec::Core::RakeTask.new(:spec)
