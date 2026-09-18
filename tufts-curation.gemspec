@@ -18,8 +18,10 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.5'
 
-  gem.add_dependency 'activerecord', '>= 6.0', '< 7'
-  gem.add_dependency 'activesupport', '>= 6.0', '< 7'
+  # gem.add_dependency 'activerecord', '>= 6.0', '< 7'
+  gem.add_dependency 'activerecord'
+  # gem.add_dependency 'activesupport', '>= 6.0', '< 7'
+  gem.add_dependency 'activesupport'
   gem.add_dependency 'active-fedora', '~> 13.1', '>= 13.1.2'
   gem.add_dependency 'hyrax',         '>= 3.0.0', '< 3.7'
   gem.add_dependency 'chronic'
