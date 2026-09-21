@@ -138,7 +138,7 @@ module Tufts
             index.as :stored_searchable, :facetable
           end
 
-          property :isbn, predicate: RDF::Vocab::Bibframe.isbn do |index|
+          property :isbn, predicate: RDF::Vocab::Bibframe.Isbn do |index|
             index.as :stored_searchable, :facetable
           end
 
