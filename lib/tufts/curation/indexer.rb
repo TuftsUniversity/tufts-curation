@@ -3,13 +3,13 @@ require 'chronic'
 # Temp remove this, probs tbd find new place to require this
 require 'services/hyrax/thumbnail_path_service'
 require 'services/hyrax/work_thumbnail_path_service'
-# require 'services/hyrax/indexes_thumbnails'
-# require 'indexers/hyrax/indexes_workflow'
-# require 'indexers/hyrax/work_indexer'
-# require 'indexers/hyrax/basic_metadata_indexer'
-# require 'indexers/hyrax/deep_indexing_service'
-# require 'indexers/concerns/hyrax/indexes_basic_metadata'
-# require 'indexers/concerns/hyrax/indexes_linked_metadata'
+require 'services/hyrax/indexes_thumbnails'
+require 'indexers/hyrax/indexes_workflow'
+require 'indexers/hyrax/work_indexer'
+require 'indexers/hyrax/basic_metadata_indexer'
+require 'indexers/hyrax/deep_indexing_service'
+require 'indexers/concerns/hyrax/indexes_basic_metadata'
+require 'indexers/concerns/hyrax/indexes_linked_metadata'
 
 module Tufts
   module Curation

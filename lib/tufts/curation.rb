@@ -6,7 +6,6 @@ hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax-3') } if hyrax_path.n
 hyrax_path = $LOAD_PATH.find { |path| path.include?('hyrax') } if hyrax_path.nil?
 print(hyrax_path)
 print("Look above here!")
-$LOAD_PATH.unshift(Pathname.new(hyrax_path).to_s)
 $LOAD_PATH.unshift(Pathname.new(hyrax_path).join('..', 'app').to_s)
 
 require 'logger'
