@@ -18,13 +18,14 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.5'
 
-  gem.add_dependency 'activerecord', '>= 6.1', '< 7'
-  gem.add_dependency 'activesupport', '>= 6.1', '< 7'
+  gem.add_dependency 'activerecord', '>= 5.0', '< 7'
+  gem.add_dependency 'activesupport', '>= 5.0', '< 7'
   gem.add_dependency 'active-fedora', '~> 13.1', '>= 13.1.2'
   gem.add_dependency 'hyrax',         '>= 3.0.0', '< 3.7'
   gem.add_dependency 'chronic'
   gem.add_dependency 'logger', '~> 1.6'
   gem.add_dependency 'solrizer'
+  gem.add_dependency 'json', '< 2.7'
   gem.add_development_dependency 'yard',         '~> 0.9'
   gem.add_development_dependency 'bixby', '~> 5.0', '>= 5.0.2' # bixby 5 briefly dropped Ruby 2.5
   gem.add_development_dependency 'hyrax-spec',   '~> 0.2'
