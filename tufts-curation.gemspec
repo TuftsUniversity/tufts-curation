@@ -28,7 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'json', '< 2.7'
   gem.add_development_dependency 'yard',         '~> 0.9'
   gem.add_development_dependency 'bixby', '~> 5.0', '>= 5.0.2' # bixby 5 briefly dropped Ruby 2.5
-  gem.add_development_dependency 'hyrax-spec',   '~> 0.2'
+  gem.add_development_dependency 'hyrax-spec',   '~> 0.3'
   gem.add_development_dependency 'rspec',        '~> 3.6'
   gem.add_development_dependency 'simplecov', '~> 0.22.0'
   gem.add_development_dependency 'simplecov-lcov', '~> 0.8.0'
