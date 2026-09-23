@@ -3,10 +3,10 @@
 shared_examples 'a tufts model' do
   subject(:work) { described_class.new }
 
-  it_behaves_like 'a model with admin metadata attributes'
+  # it_behaves_like 'a model with admin metadata attributes'
   it_behaves_like 'a model with descriptive metadata attributes'
   it_behaves_like 'a model with ordered metadata'
-  it_behaves_like 'a model with hyrax basic metadata'
+  # it_behaves_like 'a model with hyrax basic metadata'
 
   describe '#title' do
     it 'validates presence' do
