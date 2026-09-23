@@ -3,6 +3,7 @@
 shared_examples 'a tufts collection' do
   subject(:collection) { described_class.new }
 
+  # look into replacing this
   # it_behaves_like 'a model with hyrax basic metadata'
 
   it_behaves_like 'a model with ordered metadata' do

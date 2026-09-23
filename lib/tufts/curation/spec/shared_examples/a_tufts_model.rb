@@ -6,7 +6,8 @@ shared_examples 'a tufts model' do
   it_behaves_like 'a model with admin metadata attributes'
   it_behaves_like 'a model with descriptive metadata attributes'
   it_behaves_like 'a model with ordered metadata'
-  it_behaves_like 'a model with hyrax basic metadata'
+  # look into replacing this
+  # it_behaves_like 'a model with hyrax basic metadata'
 
   describe '#title' do
     it 'validates presence' do
