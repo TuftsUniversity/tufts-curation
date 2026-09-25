@@ -54,6 +54,9 @@ module Tufts
       include Hyrax::BasicMetadata
       puts("AFTER metadata")
 
+      puts "AFTER BASIC:"
+      puts properties.keys.inspect
+
       include Tufts::Curation::Schema::OrderedOverrides
     end
   end
