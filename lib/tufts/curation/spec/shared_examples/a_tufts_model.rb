@@ -22,7 +22,7 @@ shared_examples 'a tufts model' do
 
       puts "PROPERTIES:"
       puts described_class.properties.keys.inspect
-      .assert(false)
+      assert false
     end
   end
 
