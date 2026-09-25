@@ -24,6 +24,7 @@ shared_examples 'a tufts model' do
       puts described_class.properties.keys.inspect
       .assert(false)
     end
+  end
 
   describe '#title' do
     it 'validates presence' do
