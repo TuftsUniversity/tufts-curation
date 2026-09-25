@@ -23,6 +23,11 @@ shared_examples 'a tufts model' do
       puts "PROPERTIES:"
       puts described_class.properties.keys.inspect
 
+      puts "keyword?"
+      puts TuftsModel.respond_to?(:keyword)
+      puts "license?"
+      puts TuftsModel.respond_to?(:license)
+
       expect(true).to be false
     end
   end
