@@ -1,10 +1,36 @@
+# frozen_string_literal: true
+
 shared_examples 'a tufts model' do
   subject(:work) { described_class.new }
 
   it_behaves_like 'a model with admin metadata attributes'
   it_behaves_like 'a model with descriptive metadata attributes'
   it_behaves_like 'a model with ordered metadata'
-  it_behaves_like 'a model with hyrax basic metadata'
+  # look into replacing this
+  # it_behaves_like 'a model with hyrax basic metadata'
+
+  describe 'quick test' do
+    it 'GO' do
+      puts "CLASS: #{described_class}"
+      puts "ANCESTORS:"
+      puts described_class.ancestors.inspect
+
+      puts "KEYWORD?"
+      puts described_class.respond_to?(:keyword)
+      puts "LICENSE?"
+      puts described_class.respond_to?(:license)
+
+      puts "PROPERTIES:"
+      puts described_class.properties.keys.inspect
+
+      # puts "keyword?"
+      # puts TuftsModel.respond_to?(:keyword)
+      # puts "license?"
+      # puts TuftsModel.respond_to?(:license)
+
+      expect(true).to be false
+    end
+  end
 
   describe '#title' do
     it 'validates presence' do

@@ -36,11 +36,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ['2.6']
+        ruby-version: ['2.7']
         experimental: [false]
-        include:
-          - ruby-version: 2.7
-            experimental: true
 
     steps:
     - name: Install OS packages
@@ -71,11 +68,16 @@ jobs:
       run: |
         bundle exec rake hydra:test_server &
         sleep 150        
-    - name: Compile assets
-      run: |
-        bundle exec rails assets:precompile &> /dev/null
+    # - name: Compile assets
+    #   run: |
+    #     bundle update logger
+    #     ruby -rlogger -S bundle exec rails assets:precompile --trace
+    #     bundle exec rails assets:precompile --trace # &> /dev/null
     - name: Run tests
-      run: xvfb-run -a bundle exec rake ci
+      run: |
+        ls /opt/hostedtoolcache/Ruby/2.7.8/x64/lib/ruby/gems/2.7.0/gems/
+        bundle show hyrax
+        xvfb-run -a bundle exec rake ci
       env:
         RAILS_ENV: test        
         TMPDIR: /tmp

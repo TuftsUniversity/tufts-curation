@@ -62,124 +62,124 @@ module Tufts
 
       private
 
-        ##
-        # Gets the first value from a place.
-        #
-        # @return {str}
-        #   The first value returned from xpath.
-        def get_v(xpath)
-          @noko.xpath(xpath).first.value
+      ##
+      # Gets the first value from a place.
+      #
+      # @return {str}
+      #   The first value returned from xpath.
+      def get_v(xpath)
+        @noko.xpath(xpath).first.value
+      end
+
+      ##
+      # Gets all the values from a node set as strings in an array.
+      #
+      # @param {str} xpaths
+      #   The xpath strings to search
+      #
+      # @return {arr}
+      #   All the values returned by xpaths
+      def get_all_vs(*xpaths)
+        if xpaths.length.zero?
+          Rails.logger.info("You need to pass at least one argument to get_all_vs!")
+          return []
         end
 
-        ##
-        # Gets all the values from a node set as strings in an array.
-        #
-        # @param {str} xpaths
-        #   The xpath strings to search
-        #
-        # @return {arr}
-        #   All the values returned by xpaths
-        def get_all_vs(*xpaths)
-          if xpaths.length.zero?
-            Rails.logger.info("You need to pass at least one argument to get_all_vs!")
-            return []
-          end
+        all_values = []
+        xpaths.each do |path|
+          @noko.xpath(path).each { |node| all_values << node.value }
+        end
+        all_values - ['null']
+      end
 
-          all_values = []
-          xpaths.each do |path|
-            @noko.xpath(path).each { |node| all_values << node.value }
-          end
-          all_values - ['null']
+      ##
+      # Gets all the text and makes it one, like Voltron.
+      #
+      # @param {Hash} doc
+      #   The solr document.
+      #
+      # @return {string}
+      # All the text values in the xml.
+      def get_all_text(doc)
+        all_text_values = []
+        undesirables = ['voting_record_xml_tesi', 'object_profile_ssm']
+
+        doc.each do |key, value|
+          all_text_values << value unless undesirables.include?(key)
         end
 
-        ##
-        # Gets all the text and makes it one, like Voltron.
-        #
-        # @param {Hash} doc
-        #   The solr document.
-        #
-        # @return {string}
-        # All the text values in the xml.
-        def get_all_text(doc)
-          all_text_values = []
-          undesirables = ['voting_record_xml_tesi', 'object_profile_ssm']
+        all_text_values.flatten.uniq - ["null", ""]
+      end
 
-          doc.each do |key, value|
-            all_text_values << value unless undesirables.include?(key)
-          end
+      # def office_name(id)
+      #   Office.find(id).blank? ? nil : office.name
+      # end
 
-          all_text_values.flatten.uniq - ["null", ""]
-        end
-
-        # def office_name(id)
-        #   Office.find(id).blank? ? nil : office.name
-        # end
-
-        ##
-        # Loads the elections xml file into @noko
-        #
-        # @param {obj} active_fedora_obj
-        #   The object from ActiveFedora
-        def load_elections_xml(active_fedora_obj)
-          active_fedora_obj.file_sets.each do |file_set|
-            f = file_set.original_file
-            begin
-              xml = Nokogiri::XML(f.content)
-              next unless xml.xpath('/*').first.name == 'election_record'
-            rescue
-              next
-            end
-            xml.remove_namespaces!
-            @noko = xml
-          end # end each file set
-        end
-
-        ##
-        # Sends the api request to the NNV site to get authorities
-        #
-        # @param {str} q
-        #   The search string, an id for office or party, a name for state.
-        # @param {str} auth
-        #   The authority to search: office, party, or state.
-        #
-        # @return {str}
-        #   Either the authority from QA or the original term if no authority is found.
-        def get_authority_from_nnv(q, auth)
+      ##
+      # Loads the elections xml file into @noko
+      #
+      # @param {obj} active_fedora_obj
+      #   The object from ActiveFedora
+      def load_elections_xml(active_fedora_obj)
+        active_fedora_obj.file_sets.each do |file_set|
+          f = file_set.original_file
           begin
-            base_url = "http://elections-prod-01.lib.tufts.edu/qa/search"
-            uri = URI.parse("#{base_url}/#{auth}/subjects?q=#{q}")
-            response = Net::HTTP.get_response(uri)
-
-          rescue StandardError => error
-            Rails.logger.warn(error)
-            return q
+            xml = Nokogiri::XML(f.content)
+            next unless xml.xpath('/*').first.name == 'election_record'
+          rescue
+            next
           end
-          response.code == "200" ? response.body : q
-        end
+          xml.remove_namespaces!
+          @noko = xml
+        end # end each file set
+      end
 
-        ##
-        # Translates Fedora 3 urns to IIIF ids.
-        #
-        # @param {arr} urns
-        #   The Fedora 3 urns.
-        #
-        # @return {arr}
-        #   The iiif ids.
-        def get_iiif_ids(urns)
-          urns.map do |urn|
-            pid = urn.sub('central:dca:MS115:', '').sub(':', '\:')
-            begin
-              ActiveFedora::Base.where(legacy_pid_tesim: pid).first.file_sets.first.files.first.id
-            rescue StandardError
-              next
-            end
+      ##
+      # Sends the api request to the NNV site to get authorities
+      #
+      # @param {str} q
+      #   The search string, an id for office or party, a name for state.
+      # @param {str} auth
+      #   The authority to search: office, party, or state.
+      #
+      # @return {str}
+      #   Either the authority from QA or the original term if no authority is found.
+      def get_authority_from_nnv(q, auth)
+        begin
+          base_url = "http://elections-prod-01.lib.tufts.edu/qa/search"
+          uri = URI.parse("#{base_url}/#{auth}/subjects?q=#{q}")
+          response = Net::HTTP.get_response(uri)
+
+        rescue StandardError => error
+          Rails.logger.warn(error)
+          return q
+        end
+        response.code == "200" ? response.body : q
+      end
+
+      ##
+      # Translates Fedora 3 urns to IIIF ids.
+      #
+      # @param {arr} urns
+      #   The Fedora 3 urns.
+      #
+      # @return {arr}
+      #   The iiif ids.
+      def get_iiif_ids(urns)
+        urns.map do |urn|
+          pid = urn.sub('central:dca:MS115:', '').sub(':', '\:')
+          begin
+            ActiveFedora::Base.where(legacy_pid_tesim: pid).first.file_sets.first.files.first.id
+          rescue StandardError
+            next
           end
         end
+      end
 
-        # Remove NNV collections from DL collections facet.
-        def add_dl_collections_facet(solr_doc)
-          solr_doc
-        end
+      # Remove NNV collections from DL collections facet.
+      def add_dl_collections_facet(solr_doc)
+        solr_doc
+      end
     end # End class VotingRecordIndexer
   end
 end

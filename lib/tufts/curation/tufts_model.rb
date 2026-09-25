@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'hyrax/controlled_vocabularies/resource_label_caching'
 require 'hyrax/controlled_vocabularies/location'
 require 'models/concerns/hyrax/core_metadata'
 require 'models/concerns/hyrax/basic_metadata'
@@ -24,6 +25,7 @@ module Tufts
       # If it is unavailable, we skip loading the complex behavior and settle for having
       # `Hyrax::CoreMetadata` and `Hyrax::BasicMetadata` in place.
       def self.inherited(subclass)
+        super
         subclass.include 'Hyrax::WorkBehavior'.constantize
         subclass.indexer = Tufts::Curation::Indexer
       rescue NameError => e
@@ -50,6 +52,10 @@ module Tufts
       # This must be included at the end, because it finalizes the metadata
       # schema (by adding accepts_nested_attributes)
       include Hyrax::BasicMetadata
+      puts("AFTER metadata")
+
+      puts "AFTER BASIC:"
+      puts properties.keys.inspect
 
       include Tufts::Curation::Schema::OrderedOverrides
     end
