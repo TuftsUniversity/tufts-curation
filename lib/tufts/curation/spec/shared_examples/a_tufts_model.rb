@@ -22,7 +22,8 @@ shared_examples 'a tufts model' do
 
       puts "PROPERTIES:"
       puts described_class.properties.keys.inspect
-      flunk 'explicitly flunking the test'
+
+      expect(true).to be false
     end
   end
 
