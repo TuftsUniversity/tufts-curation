@@ -7,8 +7,6 @@ Lint/SuppressedException:
 Metrics/AbcSize:
   Exclude:
     - 'lib/tufts/curation/indexer.rb'
-Rails/Output:
-  Enabled: false
 Style/GuardClause:
   Exclude:
     - 'lib/tufts/curation/indexer.rb'
