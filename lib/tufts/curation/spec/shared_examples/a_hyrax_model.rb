@@ -4,6 +4,7 @@ shared_examples 'a model with hyrax 3 basic metadata' do |**opts|
   subject(:model) { described_class.new }
   let(:except)    { Array(opts[:except]) }
 
+  # TODO: rip this out and try removing hyrax-spec again
   it_behaves_like 'a model with hyrax core metadata', opts
 
   it do
