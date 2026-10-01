@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples 'a model with descriptive metadata attributes' do
   it 'has geographic_names' do
     expect(work)
