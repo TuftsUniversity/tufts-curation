@@ -131,67 +131,9 @@ module Tufts
         unless dates.empty?
           date = dates[0]
 
-          # remove trailing period
-          date = date.chomp('.') if date
+          date = normalize_date(date)
 
           valid_date = Time.new.in_time_zone
-
-          date = date.to_s.rstrip
-
-          date = date.split[1..10].join(' ') if !date.nil? && !date[/^c/].nil?
-
-          if date.match(/^Circa \d{4} – \d{4}$/) || date.match(/^Circa \d{4}–\d{4}$/)
-            _earliest, latest = date.split('–').flat_map(&:to_s)
-            date = latest
-            date = date.delete(" ")
-          end
-
-          if date.match(/^circa \d{4} – \d{4}$/) || date.match(/^circa \d{4}–\d{4}$/)
-            _earliest, latest = date.split('–').flat_map(&:to_s)
-            date = latest
-            date = date.delete(" ")
-          end
-
-          if date.match(/^Circa \d{4} -- \d{4}$/) || date.match(/^circa \d{4}--\d{4}$/)
-            _earliest, latest = date.split('–').flat_map(&:to_s)
-            date = latest
-            date = date.delete(" ")
-          end
-
-          if date.match?(/^\d{4} -- \d{4}$/)
-            _earliest, latest = date.split('--').flat_map(&:to_s)
-            date = latest
-            date = date.delete(" ")
-          end
-
-          if date.match?(/^\d{4} - \d{4}$/)
-            _earliest, latest = date.split('-').flat_map(&:to_s)
-            date = latest
-            date = date.delete(" ")
-          end
-          # end handling circa dates
-
-          # handle 01/01/2004 style dates
-          if !date.nil? && !date[/\//].nil?
-            date = date[date.rindex('/') + 1..date.length]
-            # check for 2 digit year
-            date = "19" + date if date.length == 2
-          end
-          # end handle 01/01/2004 style dates
-
-          # handle n.d.
-          date = "0" if !date.nil? && date[/n\.d/]
-          # end n.d.
-
-          # handle YYYY-MM-DD and MM-DD-YYYY
-          if !date.nil? && !date[/-/].nil?
-            date = if date.index('-') == 4
-                     date[0..date.index('-') - 1]
-                   else
-                     date[date.rindex('-') + 1..date.length]
-                   end
-          end
-          # end YYYY-MM-DD
 
           # handle ua084 collection which has dates set as 0000-00-00
           pid = object.legacy_pid.to_s.downcase
@@ -219,6 +161,78 @@ module Tufts
           # puts "valid date string: #{valid_date_string}"
           Solrizer.insert_field(solr_doc, 'pub_date_sortable', valid_date_string.to_i, :stored_sortable)
         end
+      end
+
+      def normalize_date(date)
+        # Remove trailing period
+        date = date.chomp('.') if date
+
+        # Remove trailing whitespace
+        date = date.to_s.rstrip
+
+        # Remove excess spaces
+        date = date.squish
+
+        # break up dates that like like "circa 1987 January 15" can join it back together with out circa
+        date = date.split[1..10].join(' ') if !date.nil? && !date[/^c/].nil?
+
+        if date.match(/^Circa \d{4} – \d{4}$/) || date.match(/^Circa \d{4}–\d{4}$/)
+          _earliest, latest = date.split('–').flat_map(&:to_s)
+          date = latest
+          date = date.delete(" ")
+        end
+
+        if date.match(/^circa \d{4} – \d{4}$/) || date.match(/^circa \d{4}–\d{4}$/)
+          _earliest, latest = date.split('–').flat_map(&:to_s)
+          date = latest
+          date = date.delete(" ")
+        end
+
+        if date.match(/^Circa \d{4} -- \d{4}$/) || date.match(/^circa \d{4}--\d{4}$/)
+          _earliest, latest = date.split('–').flat_map(&:to_s)
+          date = latest
+          date = date.delete(" ")
+        end
+
+        if date.match?(/^\d{4} -- \d{4}$/)
+          _earliest, latest = date.split('--').flat_map(&:to_s)
+          date = latest
+          date = date.delete(" ")
+        end
+
+        if date.match?(/^\d{4} - \d{4}$/)
+          _earliest, latest = date.split('-').flat_map(&:to_s)
+          date = latest
+          date = date.delete(" ")
+        end
+        # end handling circa dates
+
+        # handle 01/01/2004 style dates
+        if !date.nil? && !date[/\//].nil?
+          date = date[date.rindex('/') + 1..date.length]
+          # check for 2 digit year
+          date = "19" + date if date.length == 2
+        end
+        # end handle 01/01/2004 style dates
+
+        # handle n.d.
+        date = "0" if !date.nil? && date[/n\.d/]
+        # end n.d.
+
+        # handle YYYY-MM-DD and MM-DD-YYYY
+        if !date.nil? && !date[/-/].nil?
+          date = if date.index('-') == 4
+                   date[0..date.index('-') - 1]
+                 else
+                   date[date.rindex('-') + 1..date.length]
+                 end
+        end
+        # end YYYY-MM-DD
+
+        # Last time remove any odd spaces
+        date = date.squish
+        # Return date
+        date
       end
 
       def aggregate_date
