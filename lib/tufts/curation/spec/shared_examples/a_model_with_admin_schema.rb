@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples 'a model with admin metadata attributes' do
   describe '#mark_reviewed!' do
     it 'sets #reviewed?' do

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # @file
 # Contains all the code that connects Collections to their CollectionOrders
 
@@ -48,39 +49,39 @@ module Tufts
 
       private
 
-        ##
-        # @function
-        # Get the :work  CollectionOrder object related to the Collection.
-        def work_order_obj
-          @work_order_obj ||= retrieve_or_create_collection_order(:work)
-        end
+      ##
+      # @function
+      # Get the :work  CollectionOrder object related to the Collection.
+      def work_order_obj
+        @work_order_obj ||= retrieve_or_create_collection_order(:work)
+      end
 
-        ##
-        # @function
-        # Get the :work  CollectionOrder object related to the Collection.
-        def subcollection_order_obj
-          @subcollection_order_obj ||= retrieve_or_create_collection_order(:subcollection)
-        end
+      ##
+      # @function
+      # Get the :work  CollectionOrder object related to the Collection.
+      def subcollection_order_obj
+        @subcollection_order_obj ||= retrieve_or_create_collection_order(:subcollection)
+      end
 
-        ##
-        # @function
-        # Retrieves a CollectionOrder object for this collection, based on type.
-        # Creates a new CollectionOrder object if it can't find one.
-        # @param {sym} type
-        #   :work or :subcollection - everything else will error.
-        def retrieve_or_create_collection_order(type)
-          Tufts::Curation::CollectionOrder.where(collection_id: id, item_type: type).first!
-        rescue
-          Tufts::Curation::CollectionOrder.create!(collection_id: id, item_type: type)
-        end
+      ##
+      # @function
+      # Retrieves a CollectionOrder object for this collection, based on type.
+      # Creates a new CollectionOrder object if it can't find one.
+      # @param {sym} type
+      #   :work or :subcollection - everything else will error.
+      def retrieve_or_create_collection_order(type)
+        Tufts::Curation::CollectionOrder.where(collection_id: id, item_type: type).first!
+      rescue
+        Tufts::Curation::CollectionOrder.create!(collection_id: id, item_type: type)
+      end
 
-        ##
-        # @function
-        # Destroys any orders associated with collection before destroying collection.
-        def destroy_collection_orders
-          collection_orders = Tufts::Curation::CollectionOrder.where(collection_id: id)
-          collection_orders.each(&:destroy) unless collection_orders.empty?
-        end
+      ##
+      # @function
+      # Destroys any orders associated with collection before destroying collection.
+      def destroy_collection_orders
+        collection_orders = Tufts::Curation::CollectionOrder.where(collection_id: id)
+        collection_orders.each(&:destroy) unless collection_orders.empty?
+      end
     end
   end
 end

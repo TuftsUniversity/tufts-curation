@@ -1,7 +1,7 @@
 inherit_gem:
   bixby: bixby_default.yml
 
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Exclude:
     - lib/tufts/curation/indexer.rb
 Metrics/AbcSize:

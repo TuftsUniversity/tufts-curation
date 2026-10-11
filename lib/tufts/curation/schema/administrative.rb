@@ -19,7 +19,7 @@ module Tufts
       module Administrative
         extend ActiveSupport::Concern
 
-        REVIEWED_STRING = 'Batch Reviewed'.freeze
+        REVIEWED_STRING = 'Batch Reviewed'
 
         included do
           property :displays_in, predicate: ::Tufts::Vocab::Tufts.displays_in do |index|

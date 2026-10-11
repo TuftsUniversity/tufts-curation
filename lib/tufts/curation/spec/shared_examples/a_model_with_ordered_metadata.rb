@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples 'a model with ordered metadata' do
   it 'has ordered creators' do
     expect(work)
