@@ -308,7 +308,7 @@ module Tufts
       end
 
       def format_circa(date, allow_multiple = false)
-        if date.match(/^Circa \d{4} – \d{4}$/) || date.match(/^Circa \d{4}–\d{4}$/) || date.format(/^circa \d{4} – \d{4}$/) || date.match(/^circa \d{4}–\d{4}$/)
+        if date.match(/^Circa \d{4} – \d{4}$/) || date.match(/^Circa \d{4}–\d{4}$/) || date.match(/^circa \d{4} – \d{4}$/) || date.match(/^circa \d{4}–\d{4}$/)
           earliest, latest = date.split('–').flat_map(&:to_s)
           date = latest
           date = date.delete(" ")
