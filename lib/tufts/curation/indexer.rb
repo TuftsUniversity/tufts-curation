@@ -131,7 +131,7 @@ module Tufts
         unless dates.empty?
           date = dates[0]
 
-          date = normalize_date(date)
+          date = extract_year_from_date(date)
 
           valid_date = Time.new.in_time_zone
 
@@ -163,7 +163,7 @@ module Tufts
         end
       end
 
-      def normalize_date(date)
+      def extract_year_from_date(date)
         # Remove trailing period
         date = date.chomp('.') if date
 
